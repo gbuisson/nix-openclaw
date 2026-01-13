@@ -40,6 +40,9 @@ in
       blockStreamingDefault = lib.mkOption {
         type = t.oneOf [ t.enum [ "off" ] t.enum [ "on" ] ];
       };
+      bootstrapMaxChars = lib.mkOption {
+        type = t.int;
+      };
       cliBackends = lib.mkOption {
         type = t.attrsOf (t.submodule { options = {
         args = lib.mkOption {
@@ -283,6 +286,19 @@ in
           };
           minScore = lib.mkOption {
             type = t.number;
+          };
+        }; };
+        };
+        remote = lib.mkOption {
+          type = t.submodule { options = {
+          apiKey = lib.mkOption {
+            type = t.str;
+          };
+          baseUrl = lib.mkOption {
+            type = t.str;
+          };
+          headers = lib.mkOption {
+            type = t.attrsOf (t.str);
           };
         }; };
         };
@@ -617,6 +633,19 @@ in
           };
           minScore = lib.mkOption {
             type = t.number;
+          };
+        }; };
+        };
+        remote = lib.mkOption {
+          type = t.submodule { options = {
+          apiKey = lib.mkOption {
+            type = t.str;
+          };
+          baseUrl = lib.mkOption {
+            type = t.str;
+          };
+          headers = lib.mkOption {
+            type = t.attrsOf (t.str);
           };
         }; };
         };
