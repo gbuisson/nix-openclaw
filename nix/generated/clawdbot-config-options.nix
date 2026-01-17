@@ -3876,6 +3876,19 @@ in
       type = t.submodule { options = {
       audio = lib.mkOption {
         type = t.submodule { options = {
+        attachments = lib.mkOption {
+          type = t.submodule { options = {
+          maxAttachments = lib.mkOption {
+            type = t.int;
+          };
+          mode = lib.mkOption {
+            type = t.oneOf [ t.enum [ "first" ] t.enum [ "all" ] ];
+          };
+          prefer = lib.mkOption {
+            type = t.oneOf [ t.enum [ "first" ] t.enum [ "last" ] t.enum [ "path" ] t.enum [ "url" ] ];
+          };
+        }; };
+        };
         enabled = lib.mkOption {
           type = t.bool;
         };
@@ -3965,9 +3978,25 @@ in
           type = t.int;
         };
       }; };
+      };
+      concurrency = lib.mkOption {
+        type = t.int;
       };
       image = lib.mkOption {
         type = t.submodule { options = {
+        attachments = lib.mkOption {
+          type = t.submodule { options = {
+          maxAttachments = lib.mkOption {
+            type = t.int;
+          };
+          mode = lib.mkOption {
+            type = t.oneOf [ t.enum [ "first" ] t.enum [ "all" ] ];
+          };
+          prefer = lib.mkOption {
+            type = t.oneOf [ t.enum [ "first" ] t.enum [ "last" ] t.enum [ "path" ] t.enum [ "url" ] ];
+          };
+        }; };
+        };
         enabled = lib.mkOption {
           type = t.bool;
         };
@@ -4058,8 +4087,64 @@ in
         };
       }; };
       };
+      models = lib.mkOption {
+        type = t.listOf (t.submodule { options = {
+        args = lib.mkOption {
+          type = t.listOf (t.str);
+        };
+        capabilities = lib.mkOption {
+          type = t.listOf (t.oneOf [ t.enum [ "image" ] t.enum [ "audio" ] t.enum [ "video" ] ]);
+        };
+        command = lib.mkOption {
+          type = t.str;
+        };
+        language = lib.mkOption {
+          type = t.str;
+        };
+        maxBytes = lib.mkOption {
+          type = t.int;
+        };
+        maxChars = lib.mkOption {
+          type = t.int;
+        };
+        model = lib.mkOption {
+          type = t.str;
+        };
+        preferredProfile = lib.mkOption {
+          type = t.str;
+        };
+        profile = lib.mkOption {
+          type = t.str;
+        };
+        prompt = lib.mkOption {
+          type = t.str;
+        };
+        provider = lib.mkOption {
+          type = t.str;
+        };
+        timeoutSeconds = lib.mkOption {
+          type = t.int;
+        };
+        type = lib.mkOption {
+          type = t.oneOf [ t.enum [ "provider" ] t.enum [ "cli" ] ];
+        };
+      }; });
+      };
       video = lib.mkOption {
         type = t.submodule { options = {
+        attachments = lib.mkOption {
+          type = t.submodule { options = {
+          maxAttachments = lib.mkOption {
+            type = t.int;
+          };
+          mode = lib.mkOption {
+            type = t.oneOf [ t.enum [ "first" ] t.enum [ "all" ] ];
+          };
+          prefer = lib.mkOption {
+            type = t.oneOf [ t.enum [ "first" ] t.enum [ "last" ] t.enum [ "path" ] t.enum [ "url" ] ];
+          };
+        }; };
+        };
         enabled = lib.mkOption {
           type = t.bool;
         };
