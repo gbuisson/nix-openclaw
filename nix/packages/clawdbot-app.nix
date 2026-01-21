@@ -5,11 +5,11 @@
 
 stdenvNoCC.mkDerivation {
   pname = "clawdbot-app";
-  version = "2026.1.16-2";
+  version = "2026.1.20";
 
   src = fetchzip {
-    url = "https://github.com/clawdbot/clawdbot/releases/download/v2026.1.16-2/Clawdbot-2026.1.16-2.zip";
-    hash = "sha256-CQDGFA+/2McVxIw7WXtJZgr6LmtWTy0Dks++pjdU4rU=";
+    url = "https://github.com/clawdbot/clawdbot/releases/download/v2026.1.20/Clawdbot-2026.1.20.zip";
+    hash = "sha256-BQuZqiTgcshT/YUnEq4OS6RxvjeTFgpPhd2jrGmcZXk=";
     stripRoot = false;
   };
 
