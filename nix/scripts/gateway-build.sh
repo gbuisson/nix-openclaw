@@ -40,12 +40,20 @@ pnpm ui:build
 # so pnpm prune --prod will remove its dependencies
 if [ -d extensions/matrix ]; then
   echo "Preserving matrix extension dependencies..."
+  echo "DEBUG: Checking node_modules/@vector-im:"
+  ls -la node_modules/@vector-im 2>&1 || echo "  @vector-im not found at top level"
+  echo "DEBUG: Checking node_modules/@matrix-org:"
+  ls -la node_modules/@matrix-org 2>&1 || echo "  @matrix-org not found at top level"
+  echo "DEBUG: Searching for matrix-bot-sdk in .pnpm:"
+  find node_modules/.pnpm -maxdepth 2 -name "*matrix-bot*" -type d 2>/dev/null | head -5 || echo "  not found in .pnpm"
+
   mkdir -p .matrix-deps
   # Copy the matrix extension's dependencies from node_modules
   # Handle scoped packages (@scope/pkg) by preserving directory structure
   for dep in "@vector-im/matrix-bot-sdk" "@matrix-org/matrix-sdk-crypto-nodejs" "markdown-it" "music-metadata" "zod"; do
     dep_dir="node_modules/$dep"
     if [ -d "$dep_dir" ] || [ -L "$dep_dir" ]; then
+      echo "DEBUG: Found $dep"
       # For scoped packages, create the scope directory first
       case "$dep" in
         @*/*)
@@ -55,6 +63,8 @@ if [ -d extensions/matrix ]; then
       esac
       # Resolve symlink and copy actual files, preserving path
       cp -rL "$dep_dir" ".matrix-deps/$dep" 2>/dev/null || true
+    else
+      echo "DEBUG: NOT found $dep"
     fi
   done
 fi
