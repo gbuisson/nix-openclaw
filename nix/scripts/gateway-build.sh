@@ -34,5 +34,22 @@ pnpm rebuild
 bash -e -c ". \"$STDENV_SETUP\"; patchShebangs node_modules/.bin"
 pnpm build
 pnpm ui:build
+
+# Deploy matrix extension with dependencies before pruning
+# pnpm deploy bundles workspace package with all prod deps for standalone use
+if [ -d extensions/matrix ]; then
+  echo "Deploying matrix extension with dependencies..."
+  mkdir -p .matrix-deploy
+  pnpm --filter @moltbot/matrix deploy --prod .matrix-deploy
+fi
+
 CI=true pnpm prune --prod
 rm -rf node_modules/.pnpm/node_modules
+
+# Restore matrix extension node_modules from deploy
+if [ -d .matrix-deploy/node_modules ]; then
+  echo "Restoring matrix extension dependencies..."
+  rm -rf extensions/matrix/node_modules
+  mv .matrix-deploy/node_modules extensions/matrix/
+  rm -rf .matrix-deploy
+fi
