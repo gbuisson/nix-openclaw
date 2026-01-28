@@ -10,19 +10,19 @@ const argValue = (flag: string): string | null => {
 };
 
 const repo = argValue("--repo") ?? process.cwd();
-const outPath = argValue("--out") ?? path.join(process.cwd(), "nix/generated/clawdbot-config-options.nix");
+const outPath = argValue("--out") ?? path.join(process.cwd(), "nix/generated/moltbot-config-options.nix");
 
 const schemaPath = path.join(repo, "src/config/zod-schema.ts");
 const schemaUrl = pathToFileURL(schemaPath).href;
 
 const loadSchema = async (): Promise<Record<string, unknown>> => {
   const mod = await import(schemaUrl);
-  const ClawdbotSchema = mod.ClawdbotSchema;
-  if (!ClawdbotSchema || typeof ClawdbotSchema.toJSONSchema !== "function") {
-    console.error(`ClawdbotSchema not found at ${schemaPath}`);
+  const MoltbotSchema = mod.MoltbotSchema;
+  if (!MoltbotSchema || typeof MoltbotSchema.toJSONSchema !== "function") {
+    console.error(`MoltbotSchema not found at ${schemaPath}`);
     process.exit(1);
   }
-  return ClawdbotSchema.toJSONSchema({
+  return MoltbotSchema.toJSONSchema({
     target: "draft-07",
     unrepresentable: "any",
   }) as Record<string, unknown>;
@@ -244,7 +244,7 @@ const renderOption = (key: string, schemaObj: JsonSchema, _required: boolean, in
     .map((key) => renderOption(key, rootProps[key], requiredRoot.has(key), "  "))
     .join("\n\n");
 
-  const output = `# Generated from upstream Clawdbot schema. DO NOT EDIT.\n{ lib }:\nlet\n  t = lib.types;\nin\n{\n${body}\n}\n`;
+  const output = `# Generated from upstream Moltbot schema. DO NOT EDIT.\n{ lib }:\nlet\n  t = lib.types;\nin\n{\n${body}\n}\n`;
 
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, output, "utf8");

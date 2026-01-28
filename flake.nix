@@ -1,5 +1,5 @@
 {
-  description = "nix-clawdbot: declarative Clawdbot packaging";
+  description = "nix-moltbot: declarative Moltbot packaging";
 
   nixConfig = {
     extra-substituters = [ "https://cache.garnix.io" ];
@@ -13,13 +13,13 @@
     flake-utils.url = "github:numtide/flake-utils";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    nix-steipete-tools.url = "github:clawdbot/nix-steipete-tools";
+    nix-steipete-tools.url = "github:moltbot/nix-steipete-tools";
   };
 
   outputs = { self, nixpkgs, flake-utils, home-manager, nix-steipete-tools }:
     let
       overlay = import ./nix/overlay.nix;
-      sourceInfoStable = import ./nix/sources/clawdbot-source.nix;
+      sourceInfoStable = import ./nix/sources/moltbot-source.nix;
       systems = [ "x86_64-linux" "aarch64-darwin" ];
     in
     flake-utils.lib.eachSystem systems (system:
@@ -39,20 +39,20 @@
       in
       {
         packages = packageSetStable // {
-          default = packageSetStable.clawdbot;
+          default = packageSetStable.moltbot;
         };
 
         apps = {
-          clawdbot = flake-utils.lib.mkApp { drv = packageSetStable.clawdbot-gateway; };
+          moltbot = flake-utils.lib.mkApp { drv = packageSetStable.moltbot-gateway; };
         };
 
         checks = {
-          gateway = packageSetStable.clawdbot-gateway;
+          gateway = packageSetStable.moltbot-gateway;
         } // (if pkgs.stdenv.hostPlatform.isLinux then {
-          gateway-tests = pkgs.callPackage ./nix/checks/clawdbot-gateway-tests.nix {
+          gateway-tests = pkgs.callPackage ./nix/checks/moltbot-gateway-tests.nix {
             sourceInfo = sourceInfoStable;
           };
-          config-options = pkgs.callPackage ./nix/checks/clawdbot-config-options.nix {
+          config-options = pkgs.callPackage ./nix/checks/moltbot-config-options.nix {
             sourceInfo = sourceInfoStable;
           };
         } else {});
@@ -67,7 +67,7 @@
       }
     ) // {
       overlays.default = overlay;
-      homeManagerModules.clawdbot = import ./nix/modules/home-manager/clawdbot.nix;
-      darwinModules.clawdbot = import ./nix/modules/darwin/clawdbot.nix;
+      homeManagerModules.moltbot = import ./nix/modules/home-manager/moltbot.nix;
+      darwinModules.moltbot = import ./nix/modules/darwin/moltbot.nix;
     };
 }

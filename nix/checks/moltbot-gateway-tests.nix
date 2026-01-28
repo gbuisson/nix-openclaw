@@ -34,7 +34,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "clawdbot-gateway-tests";
+  pname = "moltbot-gateway-tests";
   version = "2026.1.8-2";
 
   src = fetchFromGitHub sourceFetch;

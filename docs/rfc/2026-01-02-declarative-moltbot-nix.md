@@ -1,4 +1,4 @@
-# RFC: Declarative Clawdbot as a Nix Package (nix-clawdbot)
+# RFC: Declarative Moltbot as a Nix Package (nix-moltbot)
 
 - Date: 2026-01-02
 - Status: Implementing
@@ -6,7 +6,7 @@
 
 ## 1) Narrative: what we are building and why
 
-Clawdbot is powerful but hard to install and configure for new users, especially those who do not want to learn Nix internals. We need a batteries‑included, obvious, and safe path to get a working Clawdbot instance with minimal friction. This RFC proposes a dedicated public repo, `nix-clawdbot`, that packages Clawdbot for Nix and provides a declarative, user‑friendly configuration layer with strong defaults and an agent‑first onboarding flow.
+Moltbot is powerful but hard to install and configure for new users, especially those who do not want to learn Nix internals. We need a batteries‑included, obvious, and safe path to get a working Moltbot instance with minimal friction. This RFC proposes a dedicated public repo, `nix-moltbot`, that packages Moltbot for Nix and provides a declarative, user‑friendly configuration layer with strong defaults and an agent‑first onboarding flow.
 
 The goal is a **fully declarative bootstrap**: users provide a small set of inputs (token path + allowlist), and the setup is deterministic and repeatable.
 
@@ -22,7 +22,7 @@ The goal is a **fully declarative bootstrap**: users provide a small set of inpu
 ## 1.2) Scope boundaries (avoid confusion)
 
 This RFC is only about:
-- The public `nix-clawdbot` repo (package + module + docs).
+- The public `nix-moltbot` repo (package + module + docs).
 - A generic, end‑user Nix setup that lives outside any personal config repo.
 
 This RFC is explicitly **not** about:
@@ -32,7 +32,7 @@ This RFC is explicitly **not** about:
 ## 2) Goals / Non‑goals
 
 Goals:
-- Provide a Nix package for Clawdbot and a Home Manager module with batteries‑included defaults.
+- Provide a Nix package for Moltbot and a Home Manager module with batteries‑included defaults.
 - Provide a macOS app bundle package aligned to the gateway version.
 - Make configuration technically light with explicit options and guardrails.
 - Telegram‑first configuration and defaults.
@@ -40,17 +40,17 @@ Goals:
 - New user can get a working bot in 10 minutes without understanding Nix internals.
 
 Non‑goals:
-- Rewriting Clawdbot core functionality.
+- Rewriting Moltbot core functionality.
 - Supporting non‑Nix install paths in this repo.
 - Shipping a hosted SaaS or paid hosting.
-- Replacing upstream Clawdbot docs.
+- Replacing upstream Moltbot docs.
 - Cross‑platform support (Linux/Windows) in v1.
 - CI automation in v1.
 
 ## 3) System overview
 
-`nix-clawdbot` is a public repo that provides (macOS‑only in v1, no CI in v1):
-- A Nix package derivation for the Clawdbot gateway.
+`nix-moltbot` is a public repo that provides (macOS‑only in v1, no CI in v1):
+- A Nix package derivation for the Moltbot gateway.
 - A Nix package for the macOS app bundle (DMG).
 - A Home Manager module for user‑level config and service wiring.
 - A nix‑darwin module for macOS users (optional, thin wrapper over HM).
@@ -59,20 +59,20 @@ Non‑goals:
 
 ## 4) Components and responsibilities
 
-- **Package derivation**: builds Clawdbot gateway from a pinned source.
-- **App bundle**: installs Clawdbot.app from a pinned DMG matching the gateway version.
-- **Home Manager module**: declarative config, writes `~/.clawdbot/clawdbot.json`, manages services.
+- **Package derivation**: builds Moltbot gateway from a pinned source.
+- **App bundle**: installs Moltbot.app from a pinned DMG matching the gateway version.
+- **Home Manager module**: declarative config, writes `~/.moltbot/moltbot.json`, manages services.
 - **Flake outputs**:
-  - `packages.<system>.clawdbot` (default batteries‑included bundle)
-  - `packages.<system>.clawdbot-gateway`
-  - `packages.<system>.clawdbot-app`
-  - `packages.<system>.clawdbot-tools`
-  - `homeManagerModules.clawdbot`
-  - `darwinModules.clawdbot` (if needed)
+  - `packages.<system>.moltbot` (default batteries‑included bundle)
+  - `packages.<system>.moltbot-gateway`
+  - `packages.<system>.moltbot-app`
+  - `packages.<system>.moltbot-tools`
+  - `homeManagerModules.moltbot`
+  - `darwinModules.moltbot` (if needed)
 
 ## 5) Configuration model (public contract)
 
-The Home Manager module is the public contract. It must expose a small, explicit option set (enable, token path, allowlist) and render a deterministic `~/.clawdbot/clawdbot.json`.
+The Home Manager module is the public contract. It must expose a small, explicit option set (enable, token path, allowlist) and render a deterministic `~/.moltbot/moltbot.json`.
 
 The design constraint: users should not have to write arbitrary JSON. The module is the supported configuration surface for v1.
 
@@ -92,7 +92,7 @@ The README is the only supported onboarding path. It must include:
 ## 8) Backing tools (batteries‑included)
 
 - Base and extended toolchains are installed via Nix by default.
-- Tools correspond to upstream Clawdbot skill installers (brew/go/node/uv) mapped into nixpkgs where possible.
+- Tools correspond to upstream Moltbot skill installers (brew/go/node/uv) mapped into nixpkgs where possible.
 
 ## 9) Compatibility guarantees
 
@@ -105,7 +105,7 @@ The README is the only supported onboarding path. It must include:
 We will maintain two distinct setups:
 
 - **Prod (stable)**
-  - Uses `nix-clawdbot` batteries‑included package.
+  - Uses `nix-moltbot` batteries‑included package.
   - Pinned to released tags.
   - No source builds.
   - Launchd managed by Nix.
@@ -123,8 +123,8 @@ No changes to personal `nixos-config` are made in this repo; this is a plan only
 This RFC is complete when:
 - The repo is public with a clear README and agent‑first guide.
 - Telegram‑first quickstart works on macOS with a real bot token.
-- `nix run .#clawdbot` installs gateway + app + tools.
-- Launchd uses `com.steipete.clawdbot.gateway` and logs to `/tmp/clawdbot/clawdbot-gateway.log`.
+- `nix run .#moltbot` installs gateway + app + tools.
+- Launchd uses `com.steipete.moltbot.gateway` and logs to `/tmp/moltbot/moltbot-gateway.log`.
 - App runs in attach‑only mode (does not spawn its own gateway).
 - Smoke test: user sends a Telegram message in an allowlisted chat and receives a response.
 

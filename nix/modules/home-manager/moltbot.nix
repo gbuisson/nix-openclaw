@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.programs.clawdbot;
+  cfg = config.programs.moltbot;
   homeDir = config.home.homeDirectory;
   autoExcludeTools = lib.optionals config.programs.git.enable [ "git" ];
   effectiveExcludeTools = lib.unique (cfg.excludeTools ++ autoExcludeTools);
@@ -12,11 +12,11 @@ let
   toolOverridesEnabled = cfg.toolNames != null || effectiveExcludeTools != [];
   toolSets = import ../../tools/extended.nix ({ inherit pkgs; } // toolOverrides);
   defaultPackage =
-    if toolOverridesEnabled && cfg.package == pkgs.clawdbot
-    then (pkgs.clawdbotPackages.withTools toolOverrides).clawdbot
+    if toolOverridesEnabled && cfg.package == pkgs.moltbot
+    then (pkgs.moltbotPackages.withTools toolOverrides).moltbot
     else cfg.package;
   appPackage = if cfg.appPackage != null then cfg.appPackage else defaultPackage;
-  generatedConfigOptions = import ../../generated/clawdbot-config-options.nix { lib = lib; };
+  generatedConfigOptions = import ../../generated/moltbot-config-options.nix { lib = lib; };
 
   mkBaseConfig = workspaceDir: inst: {
     gateway = { mode = "local"; };
@@ -57,7 +57,7 @@ let
     stepieteRev = "e4e2cac265de35175015cf1ae836b0b30dddd7b7";
     stepieteNarHash = "sha256-L8bKt5rK78dFP3ZoP1Oi1SSAforXVHZDsSiDO+NsvEE=";
     stepiete = tool:
-      "github:clawdbot/nix-steipete-tools?dir=tools/${tool}&rev=${stepieteRev}&narHash=${stepieteNarHash}";
+      "github:moltbot/nix-steipete-tools?dir=tools/${tool}&rev=${stepieteRev}&narHash=${stepieteNarHash}";
   in {
     summarize = stepiete "summarize";
     peekaboo = stepiete "peekaboo";
@@ -82,53 +82,53 @@ let
       enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Enable this Clawdbot instance.";
+        description = "Enable this Moltbot instance.";
       };
 
       package = lib.mkOption {
         type = lib.types.package;
         default = defaultPackage;
-        description = "Clawdbot batteries-included package.";
+        description = "Moltbot batteries-included package.";
       };
 
       stateDir = lib.mkOption {
         type = lib.types.str;
         default = if name == "default"
-          then "${homeDir}/.clawdbot"
-          else "${homeDir}/.clawdbot-${name}";
-        description = "State directory for this Clawdbot instance (logs, sessions, config).";
+          then "${homeDir}/.moltbot"
+          else "${homeDir}/.moltbot-${name}";
+        description = "State directory for this Moltbot instance (logs, sessions, config).";
       };
 
       workspaceDir = lib.mkOption {
         type = lib.types.str;
         default = "${config.stateDir}/workspace";
-        description = "Workspace directory for this Clawdbot instance.";
+        description = "Workspace directory for this Moltbot instance.";
       };
 
       configPath = lib.mkOption {
         type = lib.types.str;
-        default = "${config.stateDir}/clawdbot.json";
-        description = "Path to generated Clawdbot config JSON.";
+        default = "${config.stateDir}/moltbot.json";
+        description = "Path to generated Moltbot config JSON.";
       };
 
       logPath = lib.mkOption {
         type = lib.types.str;
         default = if name == "default"
-          then "/tmp/clawdbot/clawdbot-gateway.log"
-          else "/tmp/clawdbot/clawdbot-gateway-${name}.log";
-        description = "Log path for this Clawdbot gateway instance.";
+          then "/tmp/moltbot/moltbot-gateway.log"
+          else "/tmp/moltbot/moltbot-gateway-${name}.log";
+        description = "Log path for this Moltbot gateway instance.";
       };
 
       gatewayPort = lib.mkOption {
         type = lib.types.int;
         default = 18789;
-        description = "Gateway port used by the Clawdbot desktop app.";
+        description = "Gateway port used by the Moltbot desktop app.";
       };
 
       gatewayPath = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = "Local path to Clawdbot gateway source (dev only).";
+        description = "Local path to Moltbot gateway source (dev only).";
       };
 
       gatewayPnpmDepsHash = lib.mkOption {
@@ -227,41 +227,41 @@ let
       launchd.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Run Clawdbot gateway via launchd (macOS).";
+        description = "Run Moltbot gateway via launchd (macOS).";
       };
 
       launchd.label = lib.mkOption {
         type = lib.types.str;
         default = if name == "default"
-          then "com.steipete.clawdbot.gateway"
-          else "com.steipete.clawdbot.gateway.${name}";
+          then "com.steipete.moltbot.gateway"
+          else "com.steipete.moltbot.gateway.${name}";
         description = "launchd label for this instance.";
       };
 
       systemd.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Run Clawdbot gateway via systemd user service (Linux).";
+        description = "Run Moltbot gateway via systemd user service (Linux).";
       };
 
       systemd.unitName = lib.mkOption {
         type = lib.types.str;
         default = if name == "default"
-          then "clawdbot-gateway"
-          else "clawdbot-gateway-${name}";
+          then "moltbot-gateway"
+          else "moltbot-gateway-${name}";
         description = "systemd user service unit name for this instance.";
       };
 
       app.install.enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Install Clawdbot.app for this instance.";
+        description = "Install Moltbot.app for this instance.";
       };
 
       app.install.path = lib.mkOption {
         type = lib.types.str;
-        default = "${homeDir}/Applications/Clawdbot.app";
-        description = "Destination path for this instance's Clawdbot.app bundle.";
+        default = "${homeDir}/Applications/Moltbot.app";
+        description = "Destination path for this instance's Moltbot.app bundle.";
       };
 
       appDefaults = {
@@ -281,13 +281,13 @@ let
       configOverrides = lib.mkOption {
         type = lib.types.attrs;
         default = {};
-        description = "Additional Clawdbot config to merge into the generated JSON.";
+        description = "Additional Moltbot config to merge into the generated JSON.";
       };
 
       config = lib.mkOption {
         type = lib.types.submodule { options = generatedConfigOptions; };
         default = {};
-        description = "Upstream Clawdbot config (generated from schema).";
+        description = "Upstream Moltbot config (generated from schema).";
       };
     };
   };
@@ -297,8 +297,8 @@ let
     package = cfg.package;
     stateDir = cfg.stateDir;
     workspaceDir = cfg.workspaceDir;
-    configPath = "${cfg.stateDir}/clawdbot.json";
-    logPath = "/tmp/clawdbot/clawdbot-gateway.log";
+    configPath = "${cfg.stateDir}/moltbot.json";
+    logPath = "/tmp/moltbot/moltbot-gateway.log";
     gatewayPort = 18789;
     providers = cfg.providers;
     routing = cfg.routing;
@@ -314,7 +314,7 @@ let
     app = {
       install = {
         enable = false;
-        path = "${homeDir}/Applications/Clawdbot.app";
+        path = "${homeDir}/Applications/Moltbot.app";
       };
     };
   };
@@ -343,8 +343,8 @@ let
   renderSkill = skill:
     let
       metadataLine =
-        if skill ? clawdbot && skill.clawdbot != null
-        then "metadata: ${builtins.toJSON { clawdbot = skill.clawdbot; }}"
+        if skill ? moltbot && skill.moltbot != null
+        then "metadata: ${builtins.toJSON { moltbot = skill.moltbot; }}"
         else null;
       homepageLine =
         if skill ? homepage && skill.homepage != null
@@ -372,7 +372,7 @@ let
         if duplicateNames == [] then [] else [
           {
             assertion = false;
-            message = "programs.clawdbot.skills has duplicate names: ${lib.concatStringsSep ", " duplicateNames}";
+            message = "programs.moltbot.skills has duplicate names: ${lib.concatStringsSep ", " duplicateNames}";
           }
         ];
     in
@@ -398,7 +398,7 @@ let
                   name = "${base}/${skill.name}";
                   value = {
                     source = builtins.path {
-                      name = "clawdbot-skill-${skill.name}";
+                      name = "moltbot-skill-${skill.name}";
                       path = source;
                     };
                     recursive = true;
@@ -420,19 +420,19 @@ let
   documentsAssertions = lib.optionals documentsEnabled [
     {
       assertion = builtins.pathExists cfg.documents;
-      message = "programs.clawdbot.documents must point to an existing directory.";
+      message = "programs.moltbot.documents must point to an existing directory.";
     }
     {
       assertion = builtins.pathExists (cfg.documents + "/AGENTS.md");
-      message = "Missing AGENTS.md in programs.clawdbot.documents.";
+      message = "Missing AGENTS.md in programs.moltbot.documents.";
     }
     {
       assertion = builtins.pathExists (cfg.documents + "/SOUL.md");
-      message = "Missing SOUL.md in programs.clawdbot.documents.";
+      message = "Missing SOUL.md in programs.moltbot.documents.";
     }
     {
       assertion = builtins.pathExists (cfg.documents + "/TOOLS.md");
-      message = "Missing TOOLS.md in programs.clawdbot.documents.";
+      message = "Missing TOOLS.md in programs.moltbot.documents.";
     }
   ];
 
@@ -441,7 +441,7 @@ let
       let
         guardLine = file: ''
           if [ -e "${file}" ] && [ ! -L "${file}" ]; then
-            echo "Clawdbot documents are managed by Nix. Please adopt ${file} into your documents directory and re-run." >&2
+            echo "Moltbot documents are managed by Nix. Please adopt ${file} into your documents directory and re-run." >&2
             exit 1
           fi
         '';
@@ -502,13 +502,13 @@ let
           ];
         reportText = lib.concatStringsSep "\n" reportLines;
       in
-        pkgs.writeText "clawdbot-tools-report.md" reportText
+        pkgs.writeText "moltbot-tools-report.md" reportText
     else
       null;
 
   toolsWithReport =
     if documentsEnabled then
-      pkgs.runCommand "clawdbot-tools-with-report.md" {} ''
+      pkgs.runCommand "moltbot-tools-with-report.md" {} ''
         cat ${cfg.documents + "/TOOLS.md"} > $out
         echo "" >> $out
         cat ${toolsReport} >> $out
@@ -537,15 +537,15 @@ let
 
   resolvePlugin = plugin: let
     flake = builtins.getFlake plugin.source;
-    clawdbotPlugin =
-      if flake ? clawdbotPlugin then flake.clawdbotPlugin
-      else throw "clawdbotPlugin missing in ${plugin.source}";
-    needs = clawdbotPlugin.needs or {};
+    moltbotPlugin =
+      if flake ? moltbotPlugin then flake.moltbotPlugin
+      else throw "moltbotPlugin missing in ${plugin.source}";
+    needs = moltbotPlugin.needs or {};
   in {
     source = plugin.source;
-    name = clawdbotPlugin.name or (throw "clawdbotPlugin.name missing in ${plugin.source}");
-    skills = clawdbotPlugin.skills or [];
-    packages = clawdbotPlugin.packages or [];
+    name = moltbotPlugin.name or (throw "moltbotPlugin.name missing in ${plugin.source}");
+    skills = moltbotPlugin.skills or [];
+    packages = moltbotPlugin.packages or [];
     needs = {
       stateDirs = needs.stateDirs or [];
       requiredEnv = needs.requiredEnv or [];
@@ -567,7 +567,7 @@ let
         if duplicates == []
         then ordered
         else lib.warn
-          "programs.clawdbot.instances.${instName}: duplicate plugin names detected (${lib.concatStringsSep ", " duplicates}); last entry wins."
+          "programs.moltbot.instances.${instName}: duplicate plugin names detected (${lib.concatStringsSep ", " duplicates}); last entry wins."
           ordered
     ) enabledInstances;
 
@@ -615,11 +615,11 @@ let
             missing = missingFor p;
           in {
             assertion = missing == [];
-            message = "programs.clawdbot.instances.${instName}: plugin ${p.name} missing required env: ${lib.concatStringsSep ", " missing}";
+            message = "programs.moltbot.instances.${instName}: plugin ${p.name} missing required env: ${lib.concatStringsSep ", " missing}";
           };
         mkConfigAssertion = p: {
           assertion = !(configMissingStateDir p);
-          message = "programs.clawdbot.instances.${instName}: plugin ${p.name} provides settings but declares no stateDirs (needed for config.json).";
+          message = "programs.moltbot.instances.${instName}: plugin ${p.name} provides settings but declares no stateDirs (needed for config.json).";
         };
       in
         (map mkAssertion plugins) ++ (map mkConfigAssertion plugins)
@@ -717,10 +717,10 @@ let
   mkInstanceConfig = name: inst: let
     gatewayPackage =
       if inst.gatewayPath != null then
-        pkgs.callPackage ../../packages/clawdbot-gateway.nix {
+        pkgs.callPackage ../../packages/moltbot-gateway.nix {
           gatewaySrc = builtins.path {
             path = inst.gatewayPath;
-            name = "clawdbot-gateway-src";
+            name = "moltbot-gateway-src";
           };
           pnpmDepsHash = inst.gatewayPnpmDepsHash;
         }
@@ -733,8 +733,8 @@ let
       (lib.recursiveUpdate baseConfig (lib.recursiveUpdate (mkTelegramConfig inst) (mkRoutingConfig inst)))
       inst.configOverrides;
     configJson = builtins.toJSON mergedConfig;
-    configFile = pkgs.writeText "clawdbot-${name}.json" configJson;
-    gatewayWrapper = pkgs.writeShellScriptBin "clawdbot-gateway-${name}" ''
+    configFile = pkgs.writeText "moltbot-${name}.json" configJson;
+    gatewayWrapper = pkgs.writeShellScriptBin "moltbot-gateway-${name}" ''
       set -euo pipefail
 
       if [ -n "${lib.makeBinPath pluginPackages}" ]; then
@@ -756,7 +756,7 @@ let
         export ANTHROPIC_API_KEY
       fi
 
-      exec "${gatewayPackage}/bin/clawdbot" "$@"
+      exec "${gatewayPackage}/bin/moltbot" "$@"
     '';
   in {
     homeFile = {
@@ -774,7 +774,7 @@ let
         config = {
           Label = inst.launchd.label;
           ProgramArguments = [
-            "${gatewayWrapper}/bin/clawdbot-gateway-${name}"
+            "${gatewayWrapper}/bin/moltbot-gateway-${name}"
             "gateway"
             "--port"
             "${toString inst.gatewayPort}"
@@ -786,15 +786,14 @@ let
           StandardErrorPath = inst.logPath;
         EnvironmentVariables = {
           HOME = homeDir;
+          MOLTBOT_CONFIG_PATH = inst.configPath;
+          MOLTBOT_STATE_DIR = inst.stateDir;
+          MOLTBOT_IMAGE_BACKEND = "sips";
+          MOLTBOT_NIX_MODE = "1";
           CLAWDBOT_CONFIG_PATH = inst.configPath;
           CLAWDBOT_STATE_DIR = inst.stateDir;
           CLAWDBOT_IMAGE_BACKEND = "sips";
           CLAWDBOT_NIX_MODE = "1";
-          # Backward-compatible env names (gateway still uses CLAWDIS_* in some builds).
-          CLAWDIS_CONFIG_PATH = inst.configPath;
-          CLAWDIS_STATE_DIR = inst.stateDir;
-          CLAWDIS_IMAGE_BACKEND = "sips";
-          CLAWDIS_NIX_MODE = "1";
         };
       };
     };
@@ -803,21 +802,21 @@ let
     systemdService = lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && inst.systemd.enable) {
       "${inst.systemd.unitName}" = {
         Unit = {
-          Description = "Clawdbot gateway (${name})";
+          Description = "Moltbot gateway (${name})";
         };
         Service = {
-          ExecStart = "${gatewayWrapper}/bin/clawdbot-gateway-${name} gateway --port ${toString inst.gatewayPort}";
+          ExecStart = "${gatewayWrapper}/bin/moltbot-gateway-${name} gateway --port ${toString inst.gatewayPort}";
           WorkingDirectory = inst.stateDir;
           Restart = "always";
           RestartSec = "1s";
           Environment = [
             "HOME=${homeDir}"
+            "MOLTBOT_CONFIG_PATH=${inst.configPath}"
+            "MOLTBOT_STATE_DIR=${inst.stateDir}"
+            "MOLTBOT_NIX_MODE=1"
             "CLAWDBOT_CONFIG_PATH=${inst.configPath}"
             "CLAWDBOT_STATE_DIR=${inst.stateDir}"
             "CLAWDBOT_NIX_MODE=1"
-            "CLAWDIS_CONFIG_PATH=${inst.configPath}"
-            "CLAWDIS_STATE_DIR=${inst.stateDir}"
-            "CLAWDIS_NIX_MODE=1"
           ];
           StandardOutput = "append:${inst.logPath}";
           StandardError = "append:${inst.logPath}";
@@ -838,7 +837,7 @@ let
     else {
       name = lib.removePrefix "${homeDir}/" inst.app.install.path;
       value = {
-        source = "${appPackage}/Applications/Clawdbot.app";
+        source = "${appPackage}/Applications/Moltbot.app";
         recursive = true;
         force = true;
       };
@@ -859,22 +858,22 @@ let
   assertions = lib.flatten (lib.mapAttrsToList (name: inst: [
     {
       assertion = !inst.providers.telegram.enable || inst.providers.telegram.botTokenFile != "";
-      message = "programs.clawdbot.instances.${name}.providers.telegram.botTokenFile must be set when Telegram is enabled.";
+      message = "programs.moltbot.instances.${name}.providers.telegram.botTokenFile must be set when Telegram is enabled.";
     }
     {
       assertion = !inst.providers.telegram.enable || (lib.length inst.providers.telegram.allowFrom > 0);
-      message = "programs.clawdbot.instances.${name}.providers.telegram.allowFrom must be non-empty when Telegram is enabled.";
+      message = "programs.moltbot.instances.${name}.providers.telegram.allowFrom must be non-empty when Telegram is enabled.";
     }
   ]) enabledInstances);
 
 in {
-  options.programs.clawdbot = {
-    enable = lib.mkEnableOption "Clawdbot (batteries-included)";
+  options.programs.moltbot = {
+    enable = lib.mkEnableOption "Moltbot (batteries-included)";
 
     package = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.clawdbot;
-      description = "Clawdbot batteries-included package.";
+      default = pkgs.moltbot;
+      description = "Moltbot batteries-included package.";
     };
 
     toolNames = lib.mkOption {
@@ -892,25 +891,25 @@ in {
     appPackage = lib.mkOption {
       type = lib.types.nullOr lib.types.package;
       default = null;
-      description = "Optional Clawdbot app package (defaults to package if unset).";
+      description = "Optional Moltbot app package (defaults to package if unset).";
     };
 
     installApp = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Install Clawdbot.app at the default location.";
+      description = "Install Moltbot.app at the default location.";
     };
 
     stateDir = lib.mkOption {
       type = lib.types.str;
-      default = "${homeDir}/.clawdbot";
-      description = "State directory for Clawdbot (logs, sessions, config).";
+      default = "${homeDir}/.moltbot";
+      description = "State directory for Moltbot (logs, sessions, config).";
     };
 
     workspaceDir = lib.mkOption {
       type = lib.types.str;
-      default = "${homeDir}/.clawdbot/workspace";
-      description = "Workspace directory for Clawdbot agent skills.";
+      default = "${homeDir}/.moltbot/workspace";
+      description = "Workspace directory for Moltbot agent skills.";
     };
 
     documents = lib.mkOption {
@@ -941,10 +940,10 @@ in {
             default = "";
             description = "Optional skill body (markdown).";
           };
-          clawdbot = lib.mkOption {
+          moltbot = lib.mkOption {
             type = lib.types.nullOr lib.types.attrs;
             default = null;
-            description = "Optional clawdbot metadata for the skill frontmatter.";
+            description = "Optional moltbot metadata for the skill frontmatter.";
           };
           mode = lib.mkOption {
             type = lib.types.enum [ "symlink" "copy" "inline" ];
@@ -1098,19 +1097,19 @@ in {
     launchd.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Run Clawdbot gateway via launchd (macOS).";
+      description = "Run Moltbot gateway via launchd (macOS).";
     };
 
     systemd.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Run Clawdbot gateway via systemd user service (Linux).";
+      description = "Run Moltbot gateway via systemd user service (Linux).";
     };
 
     instances = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule instanceModule);
       default = {};
-      description = "Named Clawdbot instances (prod/test).";
+      description = "Named Moltbot instances (prod/test).";
     };
 
     exposePluginPackages = lib.mkOption {
@@ -1123,14 +1122,14 @@ in {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Install clawdbot-reload helper for no-sudo config refresh + gateway restart.";
+        description = "Install moltbot-reload helper for no-sudo config refresh + gateway restart.";
       };
     };
 
     config = lib.mkOption {
       type = lib.types.submodule { options = generatedConfigOptions; };
       default = {};
-      description = "Upstream Clawdbot config (generated from schema).";
+      description = "Upstream Moltbot config (generated from schema).";
     };
   };
 
@@ -1138,7 +1137,7 @@ in {
     assertions = assertions ++ [
       {
         assertion = lib.length (lib.attrNames appDefaultsEnabled) <= 1;
-        message = "Only one Clawdbot instance may enable appDefaults.";
+        message = "Only one Moltbot instance may enable appDefaults.";
       }
     ] ++ documentsAssertions ++ skillAssertions ++ pluginAssertions ++ pluginSkillAssertions;
 
@@ -1150,8 +1149,8 @@ in {
     home.file =
       (lib.listToAttrs (map (item: item.homeFile) instanceConfigs))
       // (lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && appPackage != null && cfg.installApp) {
-        "Applications/Clawdbot.app" = {
-          source = "${appPackage}/Applications/Clawdbot.app";
+        "Applications/Moltbot.app" = {
+          source = "${appPackage}/Applications/Moltbot.app";
           recursive = true;
           force = true;
         };
@@ -1162,44 +1161,44 @@ in {
       // pluginSkillsFiles
       // pluginConfigFiles
       // (lib.optionalAttrs cfg.reloadScript.enable {
-        ".local/bin/clawdbot-reload" = {
+        ".local/bin/moltbot-reload" = {
           executable = true;
-          source = ./clawdbot-reload.sh;
+          source = ./moltbot-reload.sh;
         };
       });
 
-    home.activation.clawdbotDocumentGuard = lib.mkIf documentsEnabled (
+    home.activation.moltbotDocumentGuard = lib.mkIf documentsEnabled (
       lib.hm.dag.entryBefore [ "writeBoundary" ] ''
         set -euo pipefail
         ${documentsGuard}
       ''
     );
 
-    home.activation.clawdbotDirs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    home.activation.moltbotDirs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       /bin/mkdir -p ${lib.concatStringsSep " " (lib.concatMap (item: item.dirs) instanceConfigs)}
       ${lib.optionalString (pluginStateDirsAll != []) "/bin/mkdir -p ${lib.concatStringsSep " " pluginStateDirsAll}"}
     '';
 
-    home.activation.clawdbotConfigFiles = lib.hm.dag.entryAfter [ "clawdbotDirs" ] ''
+    home.activation.moltbotConfigFiles = lib.hm.dag.entryAfter [ "moltbotDirs" ] ''
       set -euo pipefail
       ${lib.concatStringsSep "\n" (map (item: "/bin/ln -sfn ${item.configFile} ${item.configPath}") instanceConfigs)}
     '';
 
-    home.activation.clawdbotPluginGuard = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    home.activation.moltbotPluginGuard = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       set -euo pipefail
       ${pluginGuards}
     '';
 
-    home.activation.clawdbotAppDefaults = lib.mkIf (pkgs.stdenv.hostPlatform.isDarwin && appDefaults != {}) (
+    home.activation.moltbotAppDefaults = lib.mkIf (pkgs.stdenv.hostPlatform.isDarwin && appDefaults != {}) (
       lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        /usr/bin/defaults write com.steipete.Clawdbot clawdbot.gateway.attachExistingOnly -bool ${lib.boolToString (appDefaults.attachExistingOnly or true)}
-        /usr/bin/defaults write com.steipete.Clawdbot gatewayPort -int ${toString (appDefaults.gatewayPort or 18789)}
+        /usr/bin/defaults write com.steipete.Moltbot moltbot.gateway.attachExistingOnly -bool ${lib.boolToString (appDefaults.attachExistingOnly or true)}
+        /usr/bin/defaults write com.steipete.Moltbot gatewayPort -int ${toString (appDefaults.gatewayPort or 18789)}
       ''
     );
 
-    home.activation.clawdbotLaunchdRelink = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (
+    home.activation.moltbotLaunchdRelink = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (
       lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-        /usr/bin/env bash ${./clawdbot-launchd-relink.sh}
+        /usr/bin/env bash ${./moltbot-launchd-relink.sh}
       ''
     );
 

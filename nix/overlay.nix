@@ -9,7 +9,7 @@ let
     };
 in
 packages // {
-  clawdbotPackages = packages // {
+  moltbotPackages = packages // {
     inherit toolNames withTools;
   };
 }

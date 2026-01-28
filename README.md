@@ -1,10 +1,10 @@
-# nix-clawdbot
+# nix-moltbot
 
-> Declarative Clawdbot. Bulletproof by default.
+> Declarative Moltbot. Bulletproof by default.
 >
 > macOS + Linux (headless). Windows is out of scope for now.
 >
-> <sub>Questions? Join the Clawdbot Discord and ask in **#golden-path-deployments**: https://discord.com/channels/1456350064065904867/1457003026412736537</sub>
+> <sub>Questions? Join the Moltbot Discord and ask in **#golden-path-deployments**: https://discord.com/channels/1456350064065904867/1457003026412736537</sub>
 
 ## Table of Contents
 
@@ -103,20 +103,20 @@ Nix is a **declarative package manager**. Instead of running commands to install
 Copy this entire block and paste it to Claude, Cursor, or your preferred AI assistant:
 
 ```text
-I want to set up nix-clawdbot on my machine (macOS or Linux).
+I want to set up nix-moltbot on my machine (macOS or Linux).
 
-Repository: github:clawdbot/nix-clawdbot
+Repository: github:moltbot/nix-moltbot
 
-What nix-clawdbot is:
-- Batteries-included Nix package for Clawdbot (AI assistant gateway)
+What nix-moltbot is:
+- Batteries-included Nix package for Moltbot (AI assistant gateway)
 - Installs gateway + tools everywhere; macOS app only on macOS
 - Runs as a launchd service on macOS, systemd user service on Linux
 
 What I need you to do:
 1. Check if Determinate Nix is installed (if not, install it)
-2. Create a local flake at ~/code/clawdbot-local using templates/agent-first/flake.nix
-3. Create a docs dir next to the config (e.g., ~/code/clawdbot-local/documents) with AGENTS.md, SOUL.md, TOOLS.md
-   - If ~/.clawdbot/workspace already has these files, adopt them into the documents dir first
+2. Create a local flake at ~/code/moltbot-local using templates/agent-first/flake.nix
+3. Create a docs dir next to the config (e.g., ~/code/moltbot-local/documents) with AGENTS.md, SOUL.md, TOOLS.md
+   - If ~/.moltbot/workspace already has these files, adopt them into the documents dir first
 4. Help me create a Telegram bot (@BotFather) and get my chat ID (@userinfobot)
 5. Set up secrets (bot token, Anthropic key) - plain files at ~/.secrets/ is fine
 6. Fill in the template placeholders and run home-manager switch
@@ -131,12 +131,12 @@ My setup:
 Reference the README and templates/agent-first/flake.nix in the repo for the module options.
 ```
 
-Your agent will install Nix, create your config, and get Clawdbot running. You just answer its questions.
+Your agent will install Nix, create your config, and get Moltbot running. You just answer its questions.
 
 **What happens next:**
 1. Your agent sets everything up and runs `home-manager switch`
 2. You message your Telegram bot for the first time
-3. Clawdbot runs its **bootstrap ritual** - it asks you playful questions: *"Who am I? What am I? Who are you?"* - to learn its identity and yours
+3. Moltbot runs its **bootstrap ritual** - it asks you playful questions: *"Who am I? What am I? Who are you?"* - to learn its identity and yours
 4. Once you've named it and introduced yourself, the bootstrap is done. You're up and running.
 
 <details>
@@ -147,13 +147,13 @@ Your agent will install Nix, create your config, and get Clawdbot running. You j
 1. Install Determinate Nix.
 2. Create a local config:
    ```bash
-   mkdir -p ~/code/clawdbot-local && cd ~/code/clawdbot-local
-   nix flake init -t github:clawdbot/nix-clawdbot#agent-first
+   mkdir -p ~/code/moltbot-local && cd ~/code/moltbot-local
+   nix flake init -t github:moltbot/nix-moltbot#agent-first
    ```
 3. Edit `flake.nix` placeholders:
    - `system` = `aarch64-darwin` (Apple Silicon) or `x86_64-darwin` (Intel)
    - `home.username` and `home.homeDirectory`
-   - `programs.clawdbot.documents` with `AGENTS.md`, `SOUL.md`, `TOOLS.md`
+   - `programs.moltbot.documents` with `AGENTS.md`, `SOUL.md`, `TOOLS.md`
    - Provider secrets (Telegram/Discord tokens, Anthropic API key)
 4. Apply:
    ```bash
@@ -161,7 +161,7 @@ Your agent will install Nix, create your config, and get Clawdbot running. You j
    ```
 5. Verify:
    ```bash
-   launchctl print gui/$UID/com.steipete.clawdbot.gateway | grep state
+   launchctl print gui/$UID/com.steipete.moltbot.gateway | grep state
    ```
 
 ### Linux (headless + systemd user service)
@@ -169,13 +169,13 @@ Your agent will install Nix, create your config, and get Clawdbot running. You j
 1. Install Determinate Nix.
 2. Create a local config:
    ```bash
-   mkdir -p ~/code/clawdbot-local && cd ~/code/clawdbot-local
-   nix flake init -t github:clawdbot/nix-clawdbot#agent-first
+   mkdir -p ~/code/moltbot-local && cd ~/code/moltbot-local
+   nix flake init -t github:moltbot/nix-moltbot#agent-first
    ```
 3. Edit `flake.nix` placeholders:
    - `system` = `x86_64-linux`
    - `home.username` and `home.homeDirectory` (e.g., `/home/<user>`)
-   - `programs.clawdbot.documents` with `AGENTS.md`, `SOUL.md`, `TOOLS.md`
+   - `programs.moltbot.documents` with `AGENTS.md`, `SOUL.md`, `TOOLS.md`
    - Provider secrets (Telegram/Discord tokens, Anthropic API key)
 4. Apply:
    ```bash
@@ -183,8 +183,8 @@ Your agent will install Nix, create your config, and get Clawdbot running. You j
    ```
 5. Verify:
    ```bash
-   systemctl --user status clawdbot-gateway
-   journalctl --user -u clawdbot-gateway -f
+   systemctl --user status moltbot-gateway
+   journalctl --user -u moltbot-gateway -f
    ```
 
 </details>
@@ -203,7 +203,7 @@ You (Telegram/Discord) --> Gateway --> Tools --> Your machine does things
 1. **CLI tools** - actual programs that do stuff (take screenshots, control Spotify, transcribe audio)
 2. **Skills** - markdown files that teach the AI *how* to use those tools
 
-When you enable a plugin, Nix installs the tools and wires up the skills to Clawdbot automatically - the gateway learns what it can do.
+When you enable a plugin, Nix installs the tools and wires up the skills to Moltbot automatically - the gateway learns what it can do.
 
 **Skills**: Instructions for the AI. A skill file says "when the user wants X, run this command." The AI reads these to know what it can do.
 
@@ -213,15 +213,15 @@ When you enable a plugin, Nix installs the tools and wires up the skills to Claw
 When you run `home-manager switch`:
 
 1. Nix reads your `flake.nix` and resolves all plugin sources (GitHub repos, local paths)
-2. For each plugin, Nix looks for a `clawdbotPlugin` output that declares:
+2. For each plugin, Nix looks for a `moltbotPlugin` output that declares:
    - What CLI packages to install
    - What skill files to copy
    - What environment variables it needs
-3. Tools go on your PATH, skills get symlinked to `~/.clawdbot/workspace/skills/`
+3. Tools go on your PATH, skills get symlinked to `~/.moltbot/workspace/skills/`
 4. A launchd (macOS) or systemd user service (Linux) is created/updated to run the gateway
 5. The gateway starts, loads skills, connects to your providers
 
-All state lives in `~/.clawdbot/`. Logs at `/tmp/clawdbot/clawdbot-gateway.log`.
+All state lives in `~/.moltbot/`. Logs at `/tmp/moltbot/moltbot-gateway.log`.
 
 </details>
 
@@ -229,16 +229,16 @@ All state lives in `~/.clawdbot/`. Logs at `/tmp/clawdbot/clawdbot-gateway.log`.
 
 ## Plugins
 
-> **Note:** Complete the [Quick Start](#quick-start) first to get Clawdbot running. Then come back here to add plugins.
+> **Note:** Complete the [Quick Start](#quick-start) first to get Moltbot running. Then come back here to add plugins.
 
-Plugins extend what Clawdbot can do. Each plugin bundles tools and teaches the AI how to use them.
+Plugins extend what Moltbot can do. Each plugin bundles tools and teaches the AI how to use them.
 
 ### First-party plugins
 
-These ship with nix-clawdbot. Toggle them in your config:
+These ship with nix-moltbot. Toggle them in your config:
 
 ```nix
-programs.clawdbot.firstParty = {
+programs.moltbot.firstParty = {
   summarize.enable = true;   # Summarize web pages, PDFs, videos
   peekaboo.enable = true;    # Take screenshots
   oracle.enable = false;     # Web search
@@ -307,7 +307,7 @@ plugins = [
 <details>
 <summary><strong>For plugin developers</strong></summary>
 
-Want to make your tool available as a Clawdbot plugin? Here's the contract.
+Want to make your tool available as a Moltbot plugin? Here's the contract.
 
 **Minimum structure:**
 
@@ -319,7 +319,7 @@ your-plugin/
       SKILL.md       # Instructions for the AI
 ```
 
-**Your `flake.nix` must export `clawdbotPlugin`:**
+**Your `flake.nix` must export `moltbotPlugin`:**
 
 ```nix
 {
@@ -327,7 +327,7 @@ your-plugin/
     let
       pkgs = import nixpkgs { system = builtins.currentSystem; };
     in {
-      clawdbotPlugin = {
+      moltbotPlugin = {
         name = "hello-world";
         skills = [ ./skills/hello-world ];
         packages = [ pkgs.hello ]; # CLI tools to install
@@ -355,20 +355,20 @@ See `examples/hello-world-plugin` for a complete working example.
 
 ---
 
-**Full plugin authoring prompt** - paste this to your AI agent to make any repo nix-clawdbot-native:
+**Full plugin authoring prompt** - paste this to your AI agent to make any repo nix-moltbot-native:
 
 ```text
-Goal: Make this repo a nix-clawdbot-native plugin with the standard contract.
+Goal: Make this repo a nix-moltbot-native plugin with the standard contract.
 
 Contract to implement:
-1) Add clawdbotPlugin output in flake.nix:
+1) Add moltbotPlugin output in flake.nix:
    - name
    - skills (paths to SKILL.md dirs)
    - packages (CLI packages to put on PATH)
    - needs (stateDirs + requiredEnv)
 
 Example:
-clawdbotPlugin = {
+moltbotPlugin = {
   name = "my-plugin";
   skills = [ ./skills/my-plugin ];
   packages = [ self.packages.${system}.default ];
@@ -429,7 +429,7 @@ Deliverables: flake output, env overrides, AGENTS.md, skill update.
 
 > **Note:** You probably don't need to write this yourself. Your AI agent handles this when you use the [Quick Start](#quick-start) copypasta. These examples are here for reference.
 
-### What Clawdbot needs (minimum)
+### What Moltbot needs (minimum)
 
 1. **Telegram bot token** - create via [@BotFather](https://t.me/BotFather), save to a file
 2. **Your Telegram user ID** - get from [@userinfobot](https://t.me/userinfobot)
@@ -443,7 +443,7 @@ The simplest setup:
 
 ```nix
 {
-  programs.clawdbot = {
+  programs.moltbot = {
     enable = true;
     providers.telegram = {
       enable = true;
@@ -456,7 +456,7 @@ The simplest setup:
 
     # Built-ins (tools + skills) shipped via nix-steipete-tools.
     plugins = [
-      { source = "github:clawdbot/nix-steipete-tools?dir=tools/summarize"; }
+      { source = "github:moltbot/nix-steipete-tools?dir=tools/summarize"; }
     ];
   };
 }
@@ -466,17 +466,17 @@ Then: `home-manager switch --flake .#youruser`
 
 ### Sensible defaults config
 
-Uses `instances.default` to unlock per-group mention rules. If `instances` is set, you don't need `programs.clawdbot.enable`.
+Uses `instances.default` to unlock per-group mention rules. If `instances` is set, you don't need `programs.moltbot.enable`.
 
 ```nix
 {
-  programs.clawdbot = {
+  programs.moltbot = {
     documents = ./documents;
     instances.default = {
       enable = true;
-      package = pkgs.clawdbot; # batteries-included
-      stateDir = "~/.clawdbot";
-      workspaceDir = "~/.clawdbot/workspace";
+      package = pkgs.moltbot; # batteries-included
+      stateDir = "~/.moltbot";
+      workspaceDir = "~/.moltbot/workspace";
 
       providers.telegram = {
         enable = true;
@@ -500,8 +500,8 @@ Uses `instances.default` to unlock per-group mention rules. If `instances` is se
       # Plugins (prod: pinned GitHub). Built-ins are via nix-steipete-tools.
       # MVP target: repo pointers resolve to tools + skills automatically.
       plugins = [
-        { source = "github:clawdbot/nix-steipete-tools?dir=tools/oracle"; }
-        { source = "github:clawdbot/nix-steipete-tools?dir=tools/peekaboo"; }
+        { source = "github:moltbot/nix-steipete-tools?dir=tools/oracle"; }
+        { source = "github:moltbot/nix-steipete-tools?dir=tools/peekaboo"; }
         { source = "github:joshp123/xuezh"; }
         {
           source = "github:joshp123/padel-cli";
@@ -540,14 +540,14 @@ Use a shared base config and override only what's different. After changing loca
 ```nix
 # flake inputs (pin prod + app)
 inputs = {
-  nix-clawdbot.url = "github:clawdbot/nix-clawdbot?ref=v0.1.0"; # pins macOS app + gateway bundle
+  nix-moltbot.url = "github:moltbot/nix-moltbot?ref=v0.1.0"; # pins macOS app + gateway bundle
 };
 
 let
   prod = {
     enable = true;
-    # Prod gateway pin (comes from nix-clawdbot input @ v0.1.0 above).
-    package = inputs.nix-clawdbot.packages.${pkgs.system}.clawdbot-gateway;
+    # Prod gateway pin (comes from nix-moltbot input @ v0.1.0 above).
+    package = inputs.nix-moltbot.packages.${pkgs.system}.moltbot-gateway;
     providers.telegram.enable = true;
     providers.telegram.botTokenFile = "/run/agenix/telegram-prod";
     providers.telegram.allowFrom = [ 12345678 ];
@@ -555,19 +555,19 @@ let
     plugins = [ { source = "github:owner/your-plugin"; } ];
   };
 in {
-  # Pinned macOS app (POC: no local app builds, uses nix-clawdbot @ v0.1.0 above).
-  programs.clawdbot.appPackage =
-    inputs.nix-clawdbot.packages.${pkgs.system}.clawdbot-app;
-  programs.clawdbot.documents = ./documents;
-  programs.clawdbot.instances = {
+  # Pinned macOS app (POC: no local app builds, uses nix-moltbot @ v0.1.0 above).
+  programs.moltbot.appPackage =
+    inputs.nix-moltbot.packages.${pkgs.system}.moltbot-app;
+  programs.moltbot.documents = ./documents;
+  programs.moltbot.instances = {
     prod = prod;
     dev = prod // {
-      # Dev uses the same pinned macOS app (from nix-clawdbot input),
+      # Dev uses the same pinned macOS app (from nix-moltbot input),
       # but overrides the gateway package to a local checkout.
       providers.telegram.botTokenFile = "/run/agenix/telegram-dev";
       gatewayPort = 18790;
       # Local gateway checkout (path). App stays pinned.
-      gatewayPath = "/Users/you/code/clawdbot";
+      gatewayPath = "/Users/you/code/moltbot";
       # Local plugin overrides prod if names collide (last wins).
       plugins = prod.plugins ++ [
         { source = "path:/Users/you/code/your-plugin"; }
@@ -600,22 +600,22 @@ Home Manager auto-excludes `git` when `programs.git.enable = true`.
 Drop built-in tools that you already install elsewhere:
 
 ```nix
-programs.clawdbot.excludeTools = [ "git" "jq" "ripgrep" ];
+programs.moltbot.excludeTools = [ "git" "jq" "ripgrep" ];
 ```
 
 Or provide a custom list:
 
 ```nix
-programs.clawdbot.toolNames = [ "nodejs_22" "pnpm_10" "summarize" ];
+programs.moltbot.toolNames = [ "nodejs_22" "pnpm_10" "summarize" ];
 ```
 
-If you override `programs.clawdbot.package`, use `pkgs.clawdbotPackages.withTools { ... }.clawdbot` to apply these lists.
+If you override `programs.moltbot.package`, use `pkgs.moltbotPackages.withTools { ... }.moltbot` to apply these lists.
 
 ---
 
 ## Packaging & Updates
 
-**Goal:** `nix-clawdbot` is a great Nix package. Automation, promotion, and fleet rollout live elsewhere.
+**Goal:** `nix-moltbot` is a great Nix package. Automation, promotion, and fleet rollout live elsewhere.
 
 ### Stable only (for now)
 
@@ -624,25 +624,25 @@ We ship a single pinned upstream commit:
 
 Outputs:
 ```
-.#clawdbot
-.#clawdbot-gateway
+.#moltbot
+.#moltbot-gateway
 ```
 
 Pin lives in:
-- `nix/sources/clawdbot-source.nix`
+- `nix/sources/moltbot-source.nix`
 
 ### Responsibilities (who owns what)
 
-- **clawdbot (upstream)**: source code, tests, releases.
-- **nix-clawdbot**: Nix packaging, pins, CI builds.
-- **clawdinators**: update cadence, smoke tests, promotion, rollout/rollback.
+- **moltbot (upstream)**: source code, tests, releases.
+- **nix-moltbot**: Nix packaging, pins, CI builds.
+- **moltinators**: update cadence, smoke tests, promotion, rollout/rollback.
 
 ### Automated pipeline (no manual steps)
 
-1) **clawdinators updater** proposes a new stable pin.  
+1) **moltinators updater** proposes a new stable pin.  
 2) **Garnix** builds the package on Linux + macOS and runs `pnpm test` on Linux.  
    It also validates the generated Nix config options against the upstream schema.  
-3) **clawdinators smoke test** runs against real Discord in `#clawdinators-test`.  
+3) **moltinators smoke test** runs against real Discord in `#moltinators-test`.  
 4) If green → promote to stable.  
 5) If red → keep current stable pin.
 
@@ -654,22 +654,22 @@ Pin lives in:
 
 ```bash
 # macOS: check service
-launchctl print gui/$UID/com.steipete.clawdbot.gateway | grep state
+launchctl print gui/$UID/com.steipete.moltbot.gateway | grep state
 
 # macOS: view logs
-tail -50 /tmp/clawdbot/clawdbot-gateway.log
+tail -50 /tmp/moltbot/moltbot-gateway.log
 
 # macOS: restart
-launchctl kickstart -k gui/$UID/com.steipete.clawdbot.gateway
+launchctl kickstart -k gui/$UID/com.steipete.moltbot.gateway
 
 # Linux: check service
-systemctl --user status clawdbot-gateway
+systemctl --user status moltbot-gateway
 
 # Linux: view logs
-journalctl --user -u clawdbot-gateway -f
+journalctl --user -u moltbot-gateway -f
 
 # Linux: restart
-systemctl --user restart clawdbot-gateway
+systemctl --user restart moltbot-gateway
 
 # Rollback
 home-manager generations  # list
@@ -680,10 +680,10 @@ home-manager switch --rollback  # revert
 
 | Package | Contents |
 | --- | --- |
-| `clawdbot` (default) | macOS: gateway + app + tools · Linux: gateway + tools (headless) |
-| `clawdbot-gateway` | Gateway CLI only |
-| `clawdbot-tools` | Toolchain bundle (gateway helpers + CLIs) |
-| `clawdbot-app` | macOS app only |
+| `moltbot` (default) | macOS: gateway + app + tools · Linux: gateway + tools (headless) |
+| `moltbot-gateway` | Gateway CLI only |
+| `moltbot-tools` | Toolchain bundle (gateway helpers + CLIs) |
+| `moltbot-app` | macOS app only |
 
 ### What we manage vs what you manage
 
@@ -717,7 +717,7 @@ home-manager switch --rollback  # revert
 
 ## Philosophy
 
-The Zen of ~~Python~~ Clawdbot, ~~by~~ shamelessly stolen from Tim Peters
+The Zen of ~~Python~~ Moltbot, ~~by~~ shamelessly stolen from Tim Peters
 
 Beautiful is better than ugly.
 Explicit is better than implicit.
@@ -743,7 +743,7 @@ Namespaces are one honking great idea -- let's do more of those!
 
 ## Upstream
 
-Wraps [Clawdbot](https://github.com/clawdbot/clawdbot) by Peter Steinberger.
+Wraps [Moltbot](https://github.com/moltbot/moltbot) by Peter Steinberger.
 
 ## License
 

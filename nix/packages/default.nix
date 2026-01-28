@@ -1,5 +1,5 @@
 { pkgs
-, sourceInfo ? import ../sources/clawdbot-source.nix
+, sourceInfo ? import ../sources/moltbot-source.nix
 , steipetePkgs ? {}
 , toolNamesOverride ? null
 , excludeToolNames ? []
@@ -11,23 +11,23 @@ let
     steipetePkgs = steipetePkgs;
     inherit toolNamesOverride excludeToolNames;
   };
-  clawdbotGateway = pkgs.callPackage ./clawdbot-gateway.nix {
+  moltbotGateway = pkgs.callPackage ./moltbot-gateway.nix {
     inherit sourceInfo;
     pnpmDepsHash = sourceInfo.pnpmDepsHash or null;
   };
-  clawdbotApp = if isDarwin then pkgs.callPackage ./clawdbot-app.nix { } else null;
-  clawdbotTools = pkgs.buildEnv {
-    name = "clawdbot-tools";
+  moltbotApp = if isDarwin then pkgs.callPackage ./moltbot-app.nix { } else null;
+  moltbotTools = pkgs.buildEnv {
+    name = "moltbot-tools";
     paths = toolSets.tools;
     pathsToLink = [ "/bin" ];
   };
-  clawdbotBundle = pkgs.callPackage ./clawdbot-batteries.nix {
-    clawdbot-gateway = clawdbotGateway;
-    clawdbot-app = clawdbotApp;
+  moltbotBundle = pkgs.callPackage ./moltbot-batteries.nix {
+    moltbot-gateway = moltbotGateway;
+    moltbot-app = moltbotApp;
     extendedTools = toolSets.tools;
   };
 in {
-  clawdbot-gateway = clawdbotGateway;
-  clawdbot = clawdbotBundle;
-  clawdbot-tools = clawdbotTools;
-} // (if isDarwin then { clawdbot-app = clawdbotApp; } else {})
+  moltbot-gateway = moltbotGateway;
+  moltbot = moltbotBundle;
+  moltbot-tools = moltbotTools;
+} // (if isDarwin then { moltbot-app = moltbotApp; } else {})

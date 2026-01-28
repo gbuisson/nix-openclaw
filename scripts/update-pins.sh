@@ -2,8 +2,8 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-source_file="$repo_root/nix/sources/clawdbot-source.nix"
-app_file="$repo_root/nix/packages/clawdbot-app.nix"
+source_file="$repo_root/nix/sources/moltbot-source.nix"
+app_file="$repo_root/nix/packages/moltbot-app.nix"
 
 log() {
   printf '>> %s\n' "$*"
@@ -12,7 +12,7 @@ log() {
 upstream_checks_green() {
   local sha="$1"
   local checks_json
-  checks_json=$(gh api "/repos/clawdbot/clawdbot/commits/${sha}/check-runs?per_page=100" 2>/dev/null || true)
+  checks_json=$(gh api "/repos/moltbot/moltbot/commits/${sha}/check-runs?per_page=100" 2>/dev/null || true)
   if [[ -z "$checks_json" ]]; then
     log "No check runs found for $sha"
     return 1
@@ -45,12 +45,12 @@ if ! command -v jq >/dev/null 2>&1; then
   exit 1
 fi
 
-log "Resolving clawdbot main SHAs"
-mapfile -t candidate_shas < <(gh api /repos/clawdbot/clawdbot/commits?per_page=10 | jq -r '.[].sha' || true)
+log "Resolving moltbot main SHAs"
+mapfile -t candidate_shas < <(gh api /repos/moltbot/moltbot/commits?per_page=10 | jq -r '.[].sha' || true)
 if [[ ${#candidate_shas[@]} -eq 0 ]]; then
-  latest_sha=$(git ls-remote https://github.com/clawdbot/clawdbot.git refs/heads/main | awk '{print $1}' || true)
+  latest_sha=$(git ls-remote https://github.com/moltbot/moltbot.git refs/heads/main | awk '{print $1}' || true)
   if [[ -z "$latest_sha" ]]; then
-    echo "Failed to resolve clawdbot main SHA" >&2
+    echo "Failed to resolve moltbot main SHA" >&2
     exit 1
   fi
   candidate_shas=("$latest_sha")
@@ -66,7 +66,7 @@ for sha in "${candidate_shas[@]}"; do
     continue
   fi
   log "Testing upstream SHA: $sha"
-  source_url="https://github.com/clawdbot/clawdbot/archive/${sha}.tar.gz"
+  source_url="https://github.com/moltbot/moltbot/archive/${sha}.tar.gz"
   log "Prefetching source tarball"
   source_prefetch=$(
     nix --extra-experimental-features "nix-command flakes" store prefetch-file --unpack --json "$source_url" 2>"/tmp/nix-prefetch-source.err" \
@@ -99,12 +99,12 @@ for sha in "${candidate_shas[@]}"; do
 
   build_log=$(mktemp)
   log "Building gateway to validate pnpmDepsHash"
-  if ! nix build .#clawdbot-gateway --accept-flake-config >"$build_log" 2>&1; then
+  if ! nix build .#moltbot-gateway --accept-flake-config >"$build_log" 2>&1; then
     pnpm_hash=$(grep -Eo 'got: *sha256-[A-Za-z0-9+/=]+' "$build_log" | head -n 1 | sed 's/.*got: *//' || true)
     if [[ -n "$pnpm_hash" ]]; then
       log "pnpmDepsHash mismatch detected: $pnpm_hash"
       perl -0pi -e "s|pnpmDepsHash = \"[^\"]*\";|pnpmDepsHash = \"${pnpm_hash}\";|" "$source_file"
-      if ! nix build .#clawdbot-gateway --accept-flake-config >"$build_log" 2>&1; then
+      if ! nix build .#moltbot-gateway --accept-flake-config >"$build_log" 2>&1; then
         tail -n 200 "$build_log" >&2 || true
         rm -f "$build_log"
         continue
@@ -130,19 +130,19 @@ fi
 log "Selected upstream SHA: $selected_sha"
 
 log "Fetching latest release metadata"
-release_json=$(gh api /repos/clawdbot/clawdbot/releases?per_page=20 || true)
+release_json=$(gh api /repos/moltbot/moltbot/releases?per_page=20 || true)
 if [[ -z "$release_json" ]]; then
   echo "Failed to fetch release metadata" >&2
   exit 1
 fi
-release_tag=$(printf '%s' "$release_json" | jq -r '[.[] | select([.assets[]?.name | (test("^(Clawdbot|Clawdis)-.*\\.zip$") and (test("dSYM") | not))] | any)][0].tag_name // empty')
+release_tag=$(printf '%s' "$release_json" | jq -r '[.[] | select([.assets[]?.name | (test("^Clawdbot-.*\\.zip$") and (test("dSYM") | not))] | any)][0].tag_name // empty')
 if [[ -z "$release_tag" ]]; then
   echo "Failed to resolve a release tag with a Clawdbot app asset" >&2
   exit 1
 fi
 log "Latest app release tag with asset: $release_tag"
 
-app_url=$(printf '%s' "$release_json" | jq -r '[.[] | select([.assets[]?.name | (test("^(Clawdbot|Clawdis)-.*\\.zip$") and (test("dSYM") | not))] | any)][0].assets[] | select(.name | (test("^(Clawdbot|Clawdis)-.*\\.zip$") and (test("dSYM") | not))) | .browser_download_url' | head -n 1 || true)
+app_url=$(printf '%s' "$release_json" | jq -r '[.[] | select([.assets[]?.name | (test("^Clawdbot-.*\\.zip$") and (test("dSYM") | not))] | any)][0].assets[] | select(.name | (test("^Clawdbot-.*\\.zip$") and (test("dSYM") | not))) | .browser_download_url' | head -n 1 || true)
 if [[ -z "$app_url" ]]; then
   echo "Failed to resolve Clawdbot app asset URL from latest release" >&2
   exit 1
@@ -178,7 +178,7 @@ if [[ -z "$selected_source_store_path" ]]; then
   exit 1
 fi
 
-log "Regenerating clawdbot config options from upstream schema"
+log "Regenerating moltbot config options from upstream schema"
 tmp_src=$(mktemp -d)
 cleanup_tmp() {
   rm -rf "$tmp_src"
@@ -191,7 +191,7 @@ nix shell --extra-experimental-features "nix-command flakes" nixpkgs#nodejs_22 n
   bash -c "cd '$tmp_src/src' && pnpm install --frozen-lockfile --ignore-scripts"
 
 nix shell --extra-experimental-features "nix-command flakes" nixpkgs#nodejs_22 nixpkgs#pnpm_10 -c \
-  bash -c "cd '$tmp_src/src' && pnpm exec tsx '$repo_root/nix/scripts/generate-config-options.ts' --repo . --out '$repo_root/nix/generated/clawdbot-config-options.nix'"
+  bash -c "cd '$tmp_src/src' && pnpm exec tsx '$repo_root/nix/scripts/generate-config-options.ts' --repo . --out '$repo_root/nix/generated/moltbot-config-options.nix'"
 
 cleanup_tmp
 trap - EXIT
@@ -200,12 +200,12 @@ log "Building app to validate fetchzip hash"
 current_system=$(nix eval --impure --raw --expr 'builtins.currentSystem' 2>/dev/null || true)
 if [[ "$current_system" == *darwin* ]]; then
   app_build_log=$(mktemp)
-  if ! nix build .#clawdbot-app --accept-flake-config >"$app_build_log" 2>&1; then
+  if ! nix build .#moltbot-app --accept-flake-config >"$app_build_log" 2>&1; then
     app_hash_mismatch=$(grep -Eo 'got: *sha256-[A-Za-z0-9+/=]+' "$app_build_log" | head -n 1 | sed 's/.*got: *//' || true)
     if [[ -n "$app_hash_mismatch" ]]; then
       log "App hash mismatch detected: $app_hash_mismatch"
       perl -0pi -e "s|hash = \"[^\"]+\";|hash = \"${app_hash_mismatch}\";|" "$app_file"
-      if ! nix build .#clawdbot-app --accept-flake-config >"$app_build_log" 2>&1; then
+      if ! nix build .#moltbot-app --accept-flake-config >"$app_build_log" 2>&1; then
         tail -n 200 "$app_build_log" >&2 || true
         rm -f "$app_build_log"
         exit 1
@@ -227,22 +227,22 @@ if git diff --quiet; then
 fi
 
 log "Committing updated pins"
-git add "$source_file" "$app_file" "$repo_root/nix/generated/clawdbot-config-options.nix"
+git add "$source_file" "$app_file" "$repo_root/nix/generated/moltbot-config-options.nix"
 git commit -F - <<'EOF'
-🤖 codex: bump clawdbot pins (no-issue)
+🤖 codex: bump moltbot pins (no-issue)
 
 What:
-- pin clawdbot source to latest upstream main
+- pin moltbot source to latest upstream main
 - refresh macOS app pin to latest release asset
 - update source and app hashes
 - regenerate config options from upstream schema
 
 Why:
-- keep nix-clawdbot on latest upstream for yolo mode
+- keep nix-moltbot on latest upstream for yolo mode
 
 Tests:
-- nix build .#clawdbot-gateway --accept-flake-config
-- nix build .#clawdbot-app --accept-flake-config
+- nix build .#moltbot-gateway --accept-flake-config
+- nix build .#moltbot-app --accept-flake-config
 EOF
 
 log "Rebasing on latest main"

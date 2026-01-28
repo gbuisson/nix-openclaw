@@ -1,24 +1,24 @@
 {
-  description = "Clawdbot local";
+  description = "Moltbot local";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    nix-clawdbot.url = "github:clawdbot/nix-clawdbot";
+    nix-moltbot.url = "github:moltbot/nix-moltbot";
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-clawdbot }:
+  outputs = { self, nixpkgs, home-manager, nix-moltbot }:
     let
       # REPLACE: aarch64-darwin (Apple Silicon), x86_64-darwin (Intel), or x86_64-linux
       system = "<system>";
-      pkgs = import nixpkgs { inherit system; overlays = [ nix-clawdbot.overlays.default ]; };
+      pkgs = import nixpkgs { inherit system; overlays = [ nix-moltbot.overlays.default ]; };
     in {
       # REPLACE: <user> with your username (run `whoami`)
       homeConfigurations."<user>" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
-          nix-clawdbot.homeManagerModules.clawdbot
+          nix-moltbot.homeManagerModules.moltbot
           {
             # Required for Home Manager standalone
             home.username = "<user>";
@@ -27,7 +27,7 @@
             home.stateVersion = "24.11";
             programs.home-manager.enable = true;
 
-            programs.clawdbot = {
+            programs.moltbot = {
               # REPLACE: path to your managed documents directory
               documents = ./documents;
               instances.default = {

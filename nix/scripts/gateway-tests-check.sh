@@ -12,11 +12,11 @@ fi
 export HOME="$(mktemp -d)"
 export TMPDIR="${HOME}/tmp"
 mkdir -p "$TMPDIR"
-export CLAWDBOT_LOG_DIR="${TMPDIR}/clawdbot-logs"
-export CLAWDBOT_LOG_PATH="${CLAWDBOT_LOG_DIR}/clawdbot-gateway.log"
-mkdir -p "$CLAWDBOT_LOG_DIR"
-mkdir -p /tmp/clawdbot || true
-chmod 700 /tmp/clawdbot || true
+export MOLTBOT_LOG_DIR="${TMPDIR}/moltbot-logs"
+export MOLTBOT_LOG_PATH="${MOLTBOT_LOG_DIR}/moltbot-gateway.log"
+mkdir -p "$MOLTBOT_LOG_DIR"
+mkdir -p /tmp/moltbot || true
+chmod 700 /tmp/moltbot || true
 export VITEST_POOL="threads"
 export VITEST_MIN_THREADS="1"
 export VITEST_MAX_THREADS="1"
