@@ -9,6 +9,11 @@ if [ -d extensions ]; then
   cp -r extensions "$out/lib/moltbot/"
 fi
 
+# Include docs/reference/templates for workspace initialization
+if [ -d docs ]; then
+  cp -r docs "$out/lib/moltbot/"
+fi
+
 if [ -z "${STDENV_SETUP:-}" ]; then
   echo "STDENV_SETUP is not set" >&2
   exit 1
