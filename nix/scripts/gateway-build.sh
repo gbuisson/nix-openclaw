@@ -41,12 +41,20 @@ pnpm ui:build
 if [ -d extensions/matrix ]; then
   echo "Preserving matrix extension dependencies..."
   mkdir -p .matrix-deps
-  # Copy the matrix extension's dependencies from the pnpm virtual store
+  # Copy the matrix extension's dependencies from node_modules
+  # Handle scoped packages (@scope/pkg) by preserving directory structure
   for dep in "@vector-im/matrix-bot-sdk" "@matrix-org/matrix-sdk-crypto-nodejs" "markdown-it" "music-metadata" "zod"; do
     dep_dir="node_modules/$dep"
     if [ -d "$dep_dir" ] || [ -L "$dep_dir" ]; then
-      # Resolve symlink and copy actual files
-      cp -rL "$dep_dir" ".matrix-deps/" 2>/dev/null || true
+      # For scoped packages, create the scope directory first
+      case "$dep" in
+        @*/*)
+          scope_dir=$(dirname "$dep")
+          mkdir -p ".matrix-deps/$scope_dir"
+          ;;
+      esac
+      # Resolve symlink and copy actual files, preserving path
+      cp -rL "$dep_dir" ".matrix-deps/$dep" 2>/dev/null || true
     fi
   done
 fi
