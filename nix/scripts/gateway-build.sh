@@ -40,7 +40,7 @@ pnpm ui:build
 if [ -d extensions/matrix ]; then
   echo "Deploying matrix extension with dependencies..."
   mkdir -p .matrix-deploy
-  pnpm --filter @moltbot/matrix deploy --prod .matrix-deploy
+  pnpm --filter @moltbot/matrix deploy --prod --legacy .matrix-deploy
 fi
 
 CI=true pnpm prune --prod
