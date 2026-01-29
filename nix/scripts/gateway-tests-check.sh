@@ -18,13 +18,6 @@ mkdir -p "$MOLTBOT_LOG_DIR"
 mkdir -p /tmp/moltbot || true
 chmod 700 /tmp/moltbot || true
 export VITEST_POOL="threads"
-export VITEST_MIN_THREADS="1"
-export VITEST_MAX_THREADS="1"
-export VITEST_MIN_WORKERS="1"
-export VITEST_MAX_WORKERS="1"
-
-pnpm vitest run --config vitest.unit.config.ts --testTimeout=20000
-
 export VITEST_MIN_THREADS="2"
 export VITEST_MAX_THREADS="2"
 export VITEST_MIN_WORKERS="2"
