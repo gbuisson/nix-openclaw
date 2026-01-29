@@ -539,6 +539,7 @@ let
     flake = builtins.getFlake plugin.source;
     moltbotPlugin =
       if flake ? moltbotPlugin then flake.moltbotPlugin
+      else if flake ? clawdbotPlugin then flake.clawdbotPlugin  # backward compat
       else throw "moltbotPlugin missing in ${plugin.source}";
     needs = moltbotPlugin.needs or {};
   in {
