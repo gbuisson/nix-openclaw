@@ -108,6 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = true;
   dontPatchShebangs = true;
 
+  # Ad-hoc sign on macOS for Local Network permission (TCC)
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for bin in $out/bin/*; do
+      /usr/bin/codesign -s - -f "$bin" || true
+    done
+  '';
+
   meta = with lib; {
     description = "Telegram-first AI gateway (Moltbot)";
     homepage = "https://github.com/moltbot/moltbot";
@@ -116,3 +123,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "moltbot";
   };
 })
+
+# force rebuild - codesign fix
