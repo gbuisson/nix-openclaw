@@ -34,11 +34,14 @@ rm -rf node_modules/.pnpm/sharp@*/node_modules/sharp/src/build
 # === MATRIX EXTENSION SUPPORT ===
 # Copy matrix-sdk-crypto native binary if provided (needed because pnpm postinstall is skipped)
 if [ -n "${MATRIX_CRYPTO_LIB_SRC:-}" ] && [ -n "${MATRIX_CRYPTO_LIB_NAME:-}" ]; then
-  CRYPTO_DIR="node_modules/@matrix-org/matrix-sdk-crypto-nodejs"
-  if [ -d "$CRYPTO_DIR" ]; then
-    echo "Installing matrix-sdk-crypto native binary: $MATRIX_CRYPTO_LIB_NAME"
+  # Find the actual pnpm path for matrix-sdk-crypto-nodejs
+  CRYPTO_DIR="$(find node_modules/.pnpm -type d -name "matrix-sdk-crypto-nodejs" | grep "@matrix-org" | head -n 1)"
+  if [ -n "$CRYPTO_DIR" ]; then
+    echo "Installing matrix-sdk-crypto native binary to: $CRYPTO_DIR/$MATRIX_CRYPTO_LIB_NAME"
     cp "$MATRIX_CRYPTO_LIB_SRC" "$CRYPTO_DIR/$MATRIX_CRYPTO_LIB_NAME"
     chmod 755 "$CRYPTO_DIR/$MATRIX_CRYPTO_LIB_NAME"
+  else
+    echo "WARNING: matrix-sdk-crypto-nodejs directory not found in node_modules/.pnpm"
   fi
 fi
 # === END MATRIX EXTENSION SUPPORT ===
