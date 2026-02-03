@@ -4,7 +4,7 @@
 }:
 
 stdenvNoCC.mkDerivation {
-  pname = "moltbot-app";
+  pname = "openclaw-app";
   version = "2026.1.23";
 
   src = fetchzip {
@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation {
 
   dontUnpack = true;
 
-  installPhase = "${../scripts/moltbot-app-install.sh}";
+  installPhase = "${../scripts/openclaw-app-install.sh}";
 
   meta = with lib; {
     description = "Moltbot macOS app bundle";

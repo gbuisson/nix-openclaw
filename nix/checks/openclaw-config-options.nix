@@ -33,7 +33,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "moltbot-config-options";
+  pname = "openclaw-config-options";
   version = "2026.1.8-2";
 
   src = fetchFromGitHub sourceFetch;
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     REMOVE_PACKAGE_MANAGER_FIELD_SH = "${../scripts/remove-package-manager-field.sh}";
     STDENV_SETUP = "${stdenv}/setup";
     CONFIG_OPTIONS_GENERATOR = "${../scripts/generate-config-options.ts}";
-    CONFIG_OPTIONS_GOLDEN = "${../generated/moltbot-config-options.nix}";
+    CONFIG_OPTIONS_GOLDEN = "${../generated/openclaw-config-options.nix}";
     NODE_ENGINE_CHECK = "${../scripts/check-node-engine.ts}";
   };
 

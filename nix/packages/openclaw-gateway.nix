@@ -4,17 +4,21 @@
 , fetchurl
 , nodejs_22
 , pnpm_10
-, bun
 , pkg-config
 , jq
 , python3
+, perl
 , node-gyp
+, makeWrapper
 , vips
 , git
 , zstd
 , sourceInfo
+, gatewaySrc ? null
 , pnpmDepsHash ? (sourceInfo.pnpmDepsHash or null)
 }:
+
+assert gatewaySrc == null || pnpmDepsHash != null;
 
 let
   sourceFetch = lib.removeAttrs sourceInfo [ "pnpmDepsHash" ];
@@ -31,13 +35,28 @@ let
     dontBuild = true;
     installPhase = "${../scripts/node-addon-api-install.sh}";
   };
+
+  # Matrix crypto native binary - downloaded separately since postinstall is skipped
+  # This is needed because the @matrix-org/matrix-sdk-crypto-nodejs package
+  # downloads its native binary via postinstall, which is skipped in nix build
+  matrixCryptoLibName = if stdenv.hostPlatform.isDarwin then
+    (if stdenv.hostPlatform.isAarch64 then "matrix-sdk-crypto.darwin-arm64.node" else "matrix-sdk-crypto.darwin-x64.node")
+  else
+    (if stdenv.hostPlatform.isAarch64 then "matrix-sdk-crypto.linux-arm64-gnu.node" else "matrix-sdk-crypto.linux-x64-gnu.node");
+
+  matrixCryptoLibSrc = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
+    fetchurl {
+      url = "https://github.com/matrix-org/matrix-rust-sdk-crypto-nodejs/releases/download/v0.4.0/matrix-sdk-crypto.darwin-arm64.node";
+      hash = "sha256-9/X99ikki9q5NOUDj3KL+7OzYfOhSiTtGAZhCMEpry8=";
+    }
+  else null; # Only darwin-arm64 supported for now
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "moltbot-gateway-tests";
+  pname = "openclaw-gateway";
   version = "2026.1.8-2";
 
-  src = fetchFromGitHub sourceFetch;
+  src = if gatewaySrc != null then gatewaySrc else fetchFromGitHub sourceFetch;
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
@@ -53,11 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs_22
     pnpm_10
-    bun
     pkg-config
     jq
     python3
+    perl
     node-gyp
+    makeWrapper
     zstd
   ];
 
@@ -71,20 +91,37 @@ stdenv.mkDerivation (finalAttrs: {
     npm_config_nodedir = nodejs_22;
     npm_config_python = python3;
     NODE_PATH = "${nodeAddonApi}/lib/node_modules:${node-gyp}/lib/node_modules";
+    NODE_BIN = "${nodejs_22}/bin/node";
     PNPM_DEPS = finalAttrs.pnpmDeps;
     NODE_GYP_WRAPPER_SH = "${../scripts/node-gyp-wrapper.sh}";
     GATEWAY_PREBUILD_SH = "${../scripts/gateway-prebuild.sh}";
     PROMOTE_PNPM_INTEGRITY_SH = "${../scripts/promote-pnpm-integrity.sh}";
     REMOVE_PACKAGE_MANAGER_FIELD_SH = "${../scripts/remove-package-manager-field.sh}";
     STDENV_SETUP = "${stdenv}/setup";
+    MATRIX_CRYPTO_LIB_NAME = matrixCryptoLibName;
+    MATRIX_CRYPTO_LIB_SRC = if matrixCryptoLibSrc != null then "${matrixCryptoLibSrc}" else "";
   };
 
   postPatch = "${../scripts/gateway-postpatch.sh}";
-  buildPhase = "${../scripts/gateway-tests-build.sh}";
-
-  doCheck = true;
-  checkPhase = "${../scripts/gateway-tests-check.sh}";
-
-  installPhase = "${../scripts/empty-install.sh}";
+  buildPhase = "${../scripts/gateway-build.sh}";
+  installPhase = "${../scripts/gateway-install.sh}";
+  dontStrip = true;
   dontPatchShebangs = true;
+
+  # Ad-hoc sign on macOS for Local Network permission (TCC)
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for bin in $out/bin/*; do
+      /usr/bin/codesign -s - -f "$bin" || true
+    done
+  '';
+
+  meta = with lib; {
+    description = "Telegram-first AI gateway (Moltbot)";
+    homepage = "https://github.com/moltbot/moltbot";
+    license = licenses.mit;
+    platforms = platforms.darwin ++ platforms.linux;
+    mainProgram = "openclaw";
+  };
 })
+
+# force rebuild - codesign fix

@@ -18,7 +18,7 @@
       homeConfigurations."<user>" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
-          nix-moltbot.homeManagerModules.moltbot
+          nix-moltbot.homeManagerModules.openclaw
           {
             # Required for Home Manager standalone
             home.username = "<user>";
@@ -27,7 +27,7 @@
             home.stateVersion = "24.11";
             programs.home-manager.enable = true;
 
-            programs.moltbot = {
+            programs.openclaw = {
               # REPLACE: path to your managed documents directory
               documents = ./documents;
               instances.default = {

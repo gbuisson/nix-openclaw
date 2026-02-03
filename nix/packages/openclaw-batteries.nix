@@ -1,17 +1,17 @@
 { lib
 , buildEnv
-, moltbot-gateway
-, moltbot-app ? null
+, openclaw-gateway
+, openclaw-app ? null
 , extendedTools ? []
 }:
 
 let
-  appPaths = lib.optional (moltbot-app != null) moltbot-app;
-  appLinks = lib.optional (moltbot-app != null) "/Applications";
+  appPaths = lib.optional (openclaw-app != null) openclaw-app;
+  appLinks = lib.optional (openclaw-app != null) "/Applications";
 in
 buildEnv {
   name = "moltbot-2.0.0-beta5";
-  paths = [ moltbot-gateway ] ++ appPaths ++ extendedTools;
+  paths = [ openclaw-gateway ] ++ appPaths ++ extendedTools;
   pathsToLink = [ "/bin" ] ++ appLinks;
 
   meta = with lib; {
