@@ -6414,6 +6414,10 @@ in
         type = t.nullOr (t.bool);
         default = null;
       };
+      allowedOrigins = lib.mkOption {
+        type = t.nullOr (t.listOf (t.str));
+        default = null;
+      };
       basePath = lib.mkOption {
         type = t.nullOr (t.str);
         default = null;
