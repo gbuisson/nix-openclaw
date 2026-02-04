@@ -2309,6 +2309,10 @@ in
             type = t.nullOr (t.bool);
             default = null;
           };
+          presence = lib.mkOption {
+            type = t.nullOr (t.bool);
+            default = null;
+          };
           reactions = lib.mkOption {
             type = t.nullOr (t.bool);
             default = null;
@@ -2726,6 +2730,10 @@ in
           default = null;
         };
         polls = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
+        presence = lib.mkOption {
           type = t.nullOr (t.bool);
           default = null;
         };
