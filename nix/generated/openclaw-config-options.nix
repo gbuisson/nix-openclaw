@@ -6308,6 +6308,10 @@ in
       type = t.nullOr (t.oneOf [ (t.bool) (t.enum [ "auto" ]) ]);
       default = null;
     };
+    ownerAllowFrom = lib.mkOption {
+      type = t.nullOr (t.listOf (t.oneOf [ (t.str) (t.number) ]));
+      default = null;
+    };
     restart = lib.mkOption {
       type = t.nullOr (t.bool);
       default = null;
