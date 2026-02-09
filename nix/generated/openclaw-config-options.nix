@@ -9118,6 +9118,23 @@ in
           type = t.nullOr (t.bool);
           default = null;
         };
+        grok = lib.mkOption {
+          type = t.nullOr (t.submodule { options = {
+          apiKey = lib.mkOption {
+            type = t.nullOr (t.str);
+            default = null;
+          };
+          inlineCitations = lib.mkOption {
+            type = t.nullOr (t.bool);
+            default = null;
+          };
+          model = lib.mkOption {
+            type = t.nullOr (t.str);
+            default = null;
+          };
+        }; });
+          default = null;
+        };
         maxResults = lib.mkOption {
           type = t.nullOr (t.int);
           default = null;
@@ -9140,7 +9157,7 @@ in
           default = null;
         };
         provider = lib.mkOption {
-          type = t.nullOr (t.oneOf [ (t.enum [ "brave" ]) (t.enum [ "perplexity" ]) ]);
+          type = t.nullOr (t.oneOf [ (t.enum [ "brave" ]) (t.enum [ "perplexity" ]) (t.enum [ "grok" ]) ]);
           default = null;
         };
         timeoutSeconds = lib.mkOption {
