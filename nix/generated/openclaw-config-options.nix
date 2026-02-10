@@ -6358,6 +6358,10 @@ in
       type = t.nullOr (t.int);
       default = null;
     };
+    sessionRetention = lib.mkOption {
+      type = t.nullOr (t.oneOf [ (t.str) (t.enum [ false ]) ]);
+      default = null;
+    };
     store = lib.mkOption {
       type = t.nullOr (t.str);
       default = null;
@@ -7845,6 +7849,31 @@ in
     };
     mainKey = lib.mkOption {
       type = t.nullOr (t.str);
+      default = null;
+    };
+    maintenance = lib.mkOption {
+      type = t.nullOr (t.submodule { options = {
+      maxEntries = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
+      mode = lib.mkOption {
+        type = t.nullOr (t.enum [ "enforce" "warn" ]);
+        default = null;
+      };
+      pruneAfter = lib.mkOption {
+        type = t.nullOr (t.oneOf [ (t.str) (t.number) ]);
+        default = null;
+      };
+      pruneDays = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
+      rotateBytes = lib.mkOption {
+        type = t.nullOr (t.oneOf [ (t.str) (t.number) ]);
+        default = null;
+      };
+    }; });
       default = null;
     };
     reset = lib.mkOption {
