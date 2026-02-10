@@ -6304,6 +6304,10 @@ in
 
   commands = lib.mkOption {
     type = t.nullOr (t.submodule { options = {
+    allowFrom = lib.mkOption {
+      type = t.nullOr (t.attrsOf (t.listOf (t.oneOf [ (t.str) (t.number) ])));
+      default = null;
+    };
     bash = lib.mkOption {
       type = t.nullOr (t.bool);
       default = null;
