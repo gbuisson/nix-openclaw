@@ -2470,6 +2470,10 @@ in
             type = t.nullOr (t.listOf (t.oneOf [ (t.str) (t.number) ]));
             default = null;
           };
+          cleanupAfterResolve = lib.mkOption {
+            type = t.nullOr (t.bool);
+            default = null;
+          };
           enabled = lib.mkOption {
             type = t.nullOr (t.bool);
             default = null;
@@ -2900,6 +2904,10 @@ in
         };
         approvers = lib.mkOption {
           type = t.nullOr (t.listOf (t.oneOf [ (t.str) (t.number) ]));
+          default = null;
+        };
+        cleanupAfterResolve = lib.mkOption {
+          type = t.nullOr (t.bool);
           default = null;
         };
         enabled = lib.mkOption {
