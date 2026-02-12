@@ -7708,6 +7708,10 @@ in
       }; });
         default = null;
       };
+      searchMode = lib.mkOption {
+        type = t.nullOr (t.oneOf [ (t.enum [ "query" ]) (t.enum [ "search" ]) (t.enum [ "vsearch" ]) ]);
+        default = null;
+      };
       sessions = lib.mkOption {
         type = t.nullOr (t.submodule { options = {
         enabled = lib.mkOption {
