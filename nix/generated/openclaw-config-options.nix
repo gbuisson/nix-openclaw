@@ -7121,6 +7121,10 @@ in
               type = t.nullOr (t.int);
               default = null;
             };
+            urlAllowlist = lib.mkOption {
+              type = t.nullOr (t.listOf (t.str));
+              default = null;
+            };
           }; });
             default = null;
           };
@@ -7146,10 +7150,18 @@ in
               type = t.nullOr (t.int);
               default = null;
             };
+            urlAllowlist = lib.mkOption {
+              type = t.nullOr (t.listOf (t.str));
+              default = null;
+            };
           }; });
             default = null;
           };
           maxBodyBytes = lib.mkOption {
+            type = t.nullOr (t.int);
+            default = null;
+          };
+          maxUrlParts = lib.mkOption {
             type = t.nullOr (t.int);
             default = null;
           };
