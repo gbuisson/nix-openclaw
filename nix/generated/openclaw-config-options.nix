@@ -7320,6 +7320,19 @@ in
     }; });
       default = null;
     };
+    tools = lib.mkOption {
+      type = t.nullOr (t.submodule { options = {
+      allow = lib.mkOption {
+        type = t.nullOr (t.listOf (t.str));
+        default = null;
+      };
+      deny = lib.mkOption {
+        type = t.nullOr (t.listOf (t.str));
+        default = null;
+      };
+    }; });
+      default = null;
+    };
     trustedProxies = lib.mkOption {
       type = t.nullOr (t.listOf (t.str));
       default = null;
