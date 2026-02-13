@@ -2372,6 +2372,18 @@ in
         }; });
           default = null;
         };
+        activity = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
+        activityType = lib.mkOption {
+          type = t.nullOr (t.oneOf [ (t.enum [ 0 ]) (t.enum [ 1 ]) (t.enum [ 2 ]) (t.enum [ 3 ]) (t.enum [ 4 ]) (t.enum [ 5 ]) ]);
+          default = null;
+        };
+        activityUrl = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
         allowBots = lib.mkOption {
           type = t.nullOr (t.bool);
           default = null;
@@ -2695,6 +2707,10 @@ in
         }; });
           default = null;
         };
+        proxy = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
         replyToMode = lib.mkOption {
           type = t.nullOr (t.oneOf [ (t.enum [ "off" ]) (t.enum [ "first" ]) (t.enum [ "all" ]) ]);
           default = null;
@@ -2722,6 +2738,10 @@ in
             default = null;
           };
         }; });
+          default = null;
+        };
+        status = lib.mkOption {
+          type = t.nullOr (t.enum [ "online" "dnd" "idle" "invisible" ]);
           default = null;
         };
         textChunkLimit = lib.mkOption {
@@ -2814,6 +2834,18 @@ in
           default = null;
         };
       }; });
+        default = null;
+      };
+      activity = lib.mkOption {
+        type = t.nullOr (t.str);
+        default = null;
+      };
+      activityType = lib.mkOption {
+        type = t.nullOr (t.oneOf [ (t.enum [ 0 ]) (t.enum [ 1 ]) (t.enum [ 2 ]) (t.enum [ 3 ]) (t.enum [ 4 ]) (t.enum [ 5 ]) ]);
+        default = null;
+      };
+      activityUrl = lib.mkOption {
+        type = t.nullOr (t.str);
         default = null;
       };
       allowBots = lib.mkOption {
@@ -3139,6 +3171,10 @@ in
       }; });
         default = null;
       };
+      proxy = lib.mkOption {
+        type = t.nullOr (t.str);
+        default = null;
+      };
       replyToMode = lib.mkOption {
         type = t.nullOr (t.oneOf [ (t.enum [ "off" ]) (t.enum [ "first" ]) (t.enum [ "all" ]) ]);
         default = null;
@@ -3166,6 +3202,10 @@ in
           default = null;
         };
       }; });
+        default = null;
+      };
+      status = lib.mkOption {
+        type = t.nullOr (t.enum [ "online" "dnd" "idle" "invisible" ]);
         default = null;
       };
       textChunkLimit = lib.mkOption {
