@@ -5343,6 +5343,10 @@ in
             type = t.nullOr (t.bool);
             default = null;
           };
+          initialHistoryLimit = lib.mkOption {
+            type = t.nullOr (t.int);
+            default = null;
+          };
         }; });
           default = null;
         };
@@ -5689,6 +5693,10 @@ in
         };
         inheritParent = lib.mkOption {
           type = t.nullOr (t.bool);
+          default = null;
+        };
+        initialHistoryLimit = lib.mkOption {
+          type = t.nullOr (t.int);
           default = null;
         };
       }; });
