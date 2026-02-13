@@ -1733,6 +1733,10 @@ in
       }; });
         default = null;
       };
+      roles = lib.mkOption {
+        type = t.nullOr (t.listOf (t.str));
+        default = null;
+      };
       teamId = lib.mkOption {
         type = t.nullOr (t.str);
         default = null;
@@ -2513,6 +2517,10 @@ in
               type = t.nullOr (t.bool);
               default = null;
             };
+            roles = lib.mkOption {
+              type = t.nullOr (t.listOf (t.oneOf [ (t.str) (t.number) ]));
+              default = null;
+            };
             skills = lib.mkOption {
               type = t.nullOr (t.listOf (t.str));
               default = null;
@@ -2568,6 +2576,10 @@ in
           };
           requireMention = lib.mkOption {
             type = t.nullOr (t.bool);
+            default = null;
+          };
+          roles = lib.mkOption {
+            type = t.nullOr (t.listOf (t.oneOf [ (t.str) (t.number) ]));
             default = null;
           };
           slug = lib.mkOption {
@@ -2949,6 +2961,10 @@ in
             type = t.nullOr (t.bool);
             default = null;
           };
+          roles = lib.mkOption {
+            type = t.nullOr (t.listOf (t.oneOf [ (t.str) (t.number) ]));
+            default = null;
+          };
           skills = lib.mkOption {
             type = t.nullOr (t.listOf (t.str));
             default = null;
@@ -3004,6 +3020,10 @@ in
         };
         requireMention = lib.mkOption {
           type = t.nullOr (t.bool);
+          default = null;
+        };
+        roles = lib.mkOption {
+          type = t.nullOr (t.listOf (t.oneOf [ (t.str) (t.number) ]));
           default = null;
         };
         slug = lib.mkOption {
@@ -7302,8 +7322,20 @@ in
 
   hooks = lib.mkOption {
     type = t.nullOr (t.submodule { options = {
+    allowRequestSessionKey = lib.mkOption {
+      type = t.nullOr (t.bool);
+      default = null;
+    };
     allowedAgentIds = lib.mkOption {
       type = t.nullOr (t.listOf (t.str));
+      default = null;
+    };
+    allowedSessionKeyPrefixes = lib.mkOption {
+      type = t.nullOr (t.listOf (t.str));
+      default = null;
+    };
+    defaultSessionKey = lib.mkOption {
+      type = t.nullOr (t.str);
       default = null;
     };
     enabled = lib.mkOption {
