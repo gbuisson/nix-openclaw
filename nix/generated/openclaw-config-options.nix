@@ -1517,6 +1517,10 @@ in
               type = t.nullOr (t.bool);
               default = null;
             };
+            workspaceOnly = lib.mkOption {
+              type = t.nullOr (t.bool);
+              default = null;
+            };
           }; });
             default = null;
           };
@@ -1562,6 +1566,15 @@ in
           };
           timeoutSec = lib.mkOption {
             type = t.nullOr (t.int);
+            default = null;
+          };
+        }; });
+          default = null;
+        };
+        fs = lib.mkOption {
+          type = t.nullOr (t.submodule { options = {
+          workspaceOnly = lib.mkOption {
+            type = t.nullOr (t.bool);
             default = null;
           };
         }; });
@@ -8962,6 +8975,10 @@ in
           type = t.nullOr (t.bool);
           default = null;
         };
+        workspaceOnly = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
       }; });
         default = null;
       };
@@ -9003,6 +9020,15 @@ in
       };
       timeoutSec = lib.mkOption {
         type = t.nullOr (t.int);
+        default = null;
+      };
+    }; });
+      default = null;
+    };
+    fs = lib.mkOption {
+      type = t.nullOr (t.submodule { options = {
+      workspaceOnly = lib.mkOption {
+        type = t.nullOr (t.bool);
         default = null;
       };
     }; });
