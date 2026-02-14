@@ -2519,6 +2519,10 @@ in
             type = t.nullOr (t.listOf (t.str));
             default = null;
           };
+          target = lib.mkOption {
+            type = t.nullOr (t.enum [ "dm" "channel" "both" ]);
+            default = null;
+          };
         }; });
           default = null;
         };
@@ -2981,6 +2985,10 @@ in
         };
         sessionFilter = lib.mkOption {
           type = t.nullOr (t.listOf (t.str));
+          default = null;
+        };
+        target = lib.mkOption {
+          type = t.nullOr (t.enum [ "dm" "channel" "both" ]);
           default = null;
         };
       }; });
