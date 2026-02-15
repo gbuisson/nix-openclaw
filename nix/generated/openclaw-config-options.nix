@@ -2816,6 +2816,20 @@ in
           type = t.nullOr (t.str);
           default = null;
         };
+        ui = lib.mkOption {
+          type = t.nullOr (t.submodule { options = {
+          components = lib.mkOption {
+            type = t.nullOr (t.submodule { options = {
+            accentColor = lib.mkOption {
+              type = t.nullOr (t.str);
+              default = null;
+            };
+          }; });
+            default = null;
+          };
+        }; });
+          default = null;
+        };
       }; }));
         default = null;
       };
@@ -3290,6 +3304,20 @@ in
       };
       token = lib.mkOption {
         type = t.nullOr (t.str);
+        default = null;
+      };
+      ui = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        components = lib.mkOption {
+          type = t.nullOr (t.submodule { options = {
+          accentColor = lib.mkOption {
+            type = t.nullOr (t.str);
+            default = null;
+          };
+        }; });
+          default = null;
+        };
+      }; });
         default = null;
       };
     }; });
