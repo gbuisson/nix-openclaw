@@ -8127,6 +8127,10 @@ in
       type = t.nullOr (t.str);
       default = null;
     };
+    suppressToolErrors = lib.mkOption {
+      type = t.nullOr (t.bool);
+      default = null;
+    };
     tts = lib.mkOption {
       type = t.nullOr (t.submodule { options = {
       auto = lib.mkOption {
