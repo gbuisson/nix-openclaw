@@ -59,6 +59,10 @@ in
         type = t.nullOr (t.int);
         default = null;
       };
+      bootstrapTotalMaxChars = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
       cliBackends = lib.mkOption {
         type = t.nullOr (t.attrsOf (t.submodule { options = {
         args = lib.mkOption {
@@ -1549,6 +1553,10 @@ in
             default = null;
           };
           notifyOnExit = lib.mkOption {
+            type = t.nullOr (t.bool);
+            default = null;
+          };
+          notifyOnExitEmptySuccess = lib.mkOption {
             type = t.nullOr (t.bool);
             default = null;
           };
@@ -9003,6 +9011,10 @@ in
         default = null;
       };
       notifyOnExit = lib.mkOption {
+        type = t.nullOr (t.bool);
+        default = null;
+      };
+      notifyOnExitEmptySuccess = lib.mkOption {
         type = t.nullOr (t.bool);
         default = null;
       };
