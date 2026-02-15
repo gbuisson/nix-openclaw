@@ -827,9 +827,19 @@ in
           type = t.nullOr (t.int);
           default = null;
         };
+        maxChildrenPerAgent = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+          description = "Maximum number of active children a single agent session can spawn (default: 5).";
+        };
         maxConcurrent = lib.mkOption {
           type = t.nullOr (t.int);
           default = null;
+        };
+        maxSpawnDepth = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+          description = "Maximum nesting depth for sub-agent spawning. 1 = no nesting (default), 2 = sub-agents can spawn sub-sub-agents.";
         };
         model = lib.mkOption {
           type = t.nullOr (t.oneOf [ (t.str) (t.submodule { options = {
