@@ -7088,6 +7088,14 @@ in
       type = t.nullOr (t.str);
       default = null;
     };
+    webhook = lib.mkOption {
+      type = t.nullOr (t.str);
+      default = null;
+    };
+    webhookToken = lib.mkOption {
+      type = t.nullOr (t.str);
+      default = null;
+    };
   }; });
     default = null;
   };
