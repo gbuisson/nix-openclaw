@@ -380,6 +380,10 @@ in
           type = t.nullOr (t.str);
           default = null;
         };
+        suppressToolErrorWarnings = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
         target = lib.mkOption {
           type = t.nullOr (t.str);
           default = null;
@@ -1016,6 +1020,10 @@ in
         };
         session = lib.mkOption {
           type = t.nullOr (t.str);
+          default = null;
+        };
+        suppressToolErrorWarnings = lib.mkOption {
+          type = t.nullOr (t.bool);
           default = null;
         };
         target = lib.mkOption {
