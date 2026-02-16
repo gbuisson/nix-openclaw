@@ -10021,6 +10021,15 @@ in
     }; });
       default = null;
     };
+    sessions = lib.mkOption {
+      type = t.nullOr (t.submodule { options = {
+      visibility = lib.mkOption {
+        type = t.nullOr (t.enum [ "self" "tree" "agent" "all" ]);
+        default = null;
+      };
+    }; });
+      default = null;
+    };
     subagents = lib.mkOption {
       type = t.nullOr (t.submodule { options = {
       tools = lib.mkOption {
