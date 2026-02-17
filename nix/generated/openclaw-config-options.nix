@@ -703,10 +703,6 @@ in
           type = t.nullOr (t.bool);
           default = null;
         };
-        thinkingDefault = lib.mkOption {
-          type = t.nullOr (t.oneOf [ (t.enum [ "off" ]) (t.enum [ "minimal" ]) (t.enum [ "low" ]) (t.enum [ "medium" ]) (t.enum [ "high" ]) (t.enum [ "xhigh" ]) ]);
-          default = null;
-        };
       }; }));
         default = null;
       };
