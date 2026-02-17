@@ -7461,6 +7461,10 @@ in
       type = t.nullOr (t.oneOf [ (t.enum [ "auto" ]) (t.enum [ "lan" ]) (t.enum [ "loopback" ]) (t.enum [ "custom" ]) (t.enum [ "tailnet" ]) ]);
       default = null;
     };
+    channelHealthCheckMinutes = lib.mkOption {
+      type = t.nullOr (t.int);
+      default = null;
+    };
     controlUi = lib.mkOption {
       type = t.nullOr (t.submodule { options = {
       allowInsecureAuth = lib.mkOption {
@@ -10329,10 +10333,6 @@ in
           default = null;
         };
       }; });
-        default = null;
-      };
-      urlAllowlist = lib.mkOption {
-        type = t.nullOr (t.listOf (t.str));
         default = null;
       };
     }; });
