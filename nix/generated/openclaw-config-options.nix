@@ -515,6 +515,32 @@ in
               type = t.nullOr (t.bool);
               default = null;
             };
+            mmr = lib.mkOption {
+              type = t.nullOr (t.submodule { options = {
+              enabled = lib.mkOption {
+                type = t.nullOr (t.bool);
+                default = null;
+              };
+              lambda = lib.mkOption {
+                type = t.nullOr (t.number);
+                default = null;
+              };
+            }; });
+              default = null;
+            };
+            temporalDecay = lib.mkOption {
+              type = t.nullOr (t.submodule { options = {
+              enabled = lib.mkOption {
+                type = t.nullOr (t.bool);
+                default = null;
+              };
+              halfLifeDays = lib.mkOption {
+                type = t.nullOr (t.int);
+                default = null;
+              };
+            }; });
+              default = null;
+            };
             textWeight = lib.mkOption {
               type = t.nullOr (t.number);
               default = null;
@@ -675,6 +701,10 @@ in
         };
         streaming = lib.mkOption {
           type = t.nullOr (t.bool);
+          default = null;
+        };
+        thinkingDefault = lib.mkOption {
+          type = t.nullOr (t.oneOf [ (t.enum [ "off" ]) (t.enum [ "minimal" ]) (t.enum [ "low" ]) (t.enum [ "medium" ]) (t.enum [ "high" ]) (t.enum [ "xhigh" ]) ]);
           default = null;
         };
       }; }));
@@ -1158,6 +1188,32 @@ in
             };
             enabled = lib.mkOption {
               type = t.nullOr (t.bool);
+              default = null;
+            };
+            mmr = lib.mkOption {
+              type = t.nullOr (t.submodule { options = {
+              enabled = lib.mkOption {
+                type = t.nullOr (t.bool);
+                default = null;
+              };
+              lambda = lib.mkOption {
+                type = t.nullOr (t.number);
+                default = null;
+              };
+            }; });
+              default = null;
+            };
+            temporalDecay = lib.mkOption {
+              type = t.nullOr (t.submodule { options = {
+              enabled = lib.mkOption {
+                type = t.nullOr (t.bool);
+                default = null;
+              };
+              halfLifeDays = lib.mkOption {
+                type = t.nullOr (t.int);
+                default = null;
+              };
+            }; });
               default = null;
             };
             textWeight = lib.mkOption {
@@ -1653,6 +1709,48 @@ in
           type = t.nullOr (t.submodule { options = {
           workspaceOnly = lib.mkOption {
             type = t.nullOr (t.bool);
+            default = null;
+          };
+        }; });
+          default = null;
+        };
+        loopDetection = lib.mkOption {
+          type = t.nullOr (t.submodule { options = {
+          criticalThreshold = lib.mkOption {
+            type = t.nullOr (t.int);
+            default = null;
+          };
+          detectors = lib.mkOption {
+            type = t.nullOr (t.submodule { options = {
+            genericRepeat = lib.mkOption {
+              type = t.nullOr (t.bool);
+              default = null;
+            };
+            knownPollNoProgress = lib.mkOption {
+              type = t.nullOr (t.bool);
+              default = null;
+            };
+            pingPong = lib.mkOption {
+              type = t.nullOr (t.bool);
+              default = null;
+            };
+          }; });
+            default = null;
+          };
+          enabled = lib.mkOption {
+            type = t.nullOr (t.bool);
+            default = null;
+          };
+          globalCircuitBreakerThreshold = lib.mkOption {
+            type = t.nullOr (t.int);
+            default = null;
+          };
+          historySize = lib.mkOption {
+            type = t.nullOr (t.int);
+            default = null;
+          };
+          warningThreshold = lib.mkOption {
+            type = t.nullOr (t.int);
             default = null;
           };
         }; });
@@ -3552,6 +3650,10 @@ in
           type = t.nullOr (t.str);
           default = null;
         };
+        streamMode = lib.mkOption {
+          type = t.nullOr (t.enum [ "replace" "status_final" "append" ]);
+          default = null;
+        };
         textChunkLimit = lib.mkOption {
           type = t.nullOr (t.int);
           default = null;
@@ -3730,6 +3832,10 @@ in
       };
       serviceAccountFile = lib.mkOption {
         type = t.nullOr (t.str);
+        default = null;
+      };
+      streamMode = lib.mkOption {
+        type = t.nullOr (t.enum [ "replace" "status_final" "append" ]);
         default = null;
       };
       textChunkLimit = lib.mkOption {
@@ -9001,6 +9107,31 @@ in
     }; });
       default = null;
     };
+    limits = lib.mkOption {
+      type = t.nullOr (t.submodule { options = {
+      maxCandidatesPerRoot = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
+      maxSkillFileBytes = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
+      maxSkillsInPrompt = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
+      maxSkillsLoadedPerSource = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
+      maxSkillsPromptChars = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
+    }; });
+      default = null;
+    };
     load = lib.mkOption {
       type = t.nullOr (t.submodule { options = {
       extraDirs = lib.mkOption {
@@ -9257,6 +9388,48 @@ in
         default = null;
       };
       timeoutSeconds = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
+    }; });
+      default = null;
+    };
+    loopDetection = lib.mkOption {
+      type = t.nullOr (t.submodule { options = {
+      criticalThreshold = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
+      detectors = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        genericRepeat = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
+        knownPollNoProgress = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
+        pingPong = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
+      }; });
+        default = null;
+      };
+      enabled = lib.mkOption {
+        type = t.nullOr (t.bool);
+        default = null;
+      };
+      globalCircuitBreakerThreshold = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
+      historySize = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
+      warningThreshold = lib.mkOption {
         type = t.nullOr (t.int);
         default = null;
       };
@@ -10156,6 +10329,10 @@ in
           default = null;
         };
       }; });
+        default = null;
+      };
+      urlAllowlist = lib.mkOption {
+        type = t.nullOr (t.listOf (t.str));
         default = null;
       };
     }; });
