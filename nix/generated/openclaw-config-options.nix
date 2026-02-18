@@ -412,6 +412,10 @@ in
       }; });
         default = null;
       };
+      imageMaxDimensionPx = lib.mkOption {
+        type = t.nullOr (t.int);
+        default = null;
+      };
       imageModel = lib.mkOption {
         type = t.nullOr (t.submodule { options = {
         fallbacks = lib.mkOption {
@@ -5655,6 +5659,10 @@ in
         }; });
           default = null;
         };
+        streaming = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
         textChunkLimit = lib.mkOption {
           type = t.nullOr (t.int);
           default = null;
@@ -6017,6 +6025,10 @@ in
           default = null;
         };
       }; });
+        default = null;
+      };
+      streaming = lib.mkOption {
+        type = t.nullOr (t.bool);
         default = null;
       };
       textChunkLimit = lib.mkOption {
