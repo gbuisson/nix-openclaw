@@ -2034,6 +2034,23 @@ in
     }; });
       default = null;
     };
+    ssrfPolicy = lib.mkOption {
+      type = t.nullOr (t.submodule { options = {
+      allowPrivateNetwork = lib.mkOption {
+        type = t.nullOr (t.bool);
+        default = null;
+      };
+      allowedHostnames = lib.mkOption {
+        type = t.nullOr (t.listOf (t.str));
+        default = null;
+      };
+      hostnameAllowlist = lib.mkOption {
+        type = t.nullOr (t.listOf (t.str));
+        default = null;
+      };
+    }; });
+      default = null;
+    };
   }; });
     default = null;
   };
@@ -3865,6 +3882,10 @@ in
           type = t.nullOr (t.listOf (t.oneOf [ (t.str) (t.number) ]));
           default = null;
         };
+        attachmentRoots = lib.mkOption {
+          type = t.nullOr (t.listOf (t.str));
+          default = null;
+        };
         blockStreaming = lib.mkOption {
           type = t.nullOr (t.bool);
           default = null;
@@ -4024,6 +4045,10 @@ in
           type = t.nullOr (t.str);
           default = null;
         };
+        remoteAttachmentRoots = lib.mkOption {
+          type = t.nullOr (t.listOf (t.str));
+          default = null;
+        };
         remoteHost = lib.mkOption {
           type = t.nullOr (t.str);
           default = null;
@@ -4045,6 +4070,10 @@ in
       };
       allowFrom = lib.mkOption {
         type = t.nullOr (t.listOf (t.oneOf [ (t.str) (t.number) ]));
+        default = null;
+      };
+      attachmentRoots = lib.mkOption {
+        type = t.nullOr (t.listOf (t.str));
         default = null;
       };
       blockStreaming = lib.mkOption {
@@ -4204,6 +4233,10 @@ in
       };
       region = lib.mkOption {
         type = t.nullOr (t.str);
+        default = null;
+      };
+      remoteAttachmentRoots = lib.mkOption {
+        type = t.nullOr (t.listOf (t.str));
         default = null;
       };
       remoteHost = lib.mkOption {
