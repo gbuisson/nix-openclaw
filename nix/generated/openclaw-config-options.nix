@@ -8845,6 +8845,15 @@ in
     }; });
       default = null;
     };
+    runtime = lib.mkOption {
+      type = t.nullOr (t.submodule { options = {
+      allowLegacyExec = lib.mkOption {
+        type = t.nullOr (t.bool);
+        default = null;
+      };
+    }; });
+      default = null;
+    };
     slots = lib.mkOption {
       type = t.nullOr (t.submodule { options = {
       memory = lib.mkOption {
