@@ -7414,7 +7414,7 @@ in
         default = null;
       };
       mode = lib.mkOption {
-        type = t.nullOr (t.oneOf [ (t.enum [ "token" ]) (t.enum [ "password" ]) (t.enum [ "trusted-proxy" ]) ]);
+        type = t.nullOr (t.oneOf [ (t.enum [ "none" ]) (t.enum [ "token" ]) (t.enum [ "password" ]) (t.enum [ "trusted-proxy" ]) ]);
         default = null;
       };
       password = lib.mkOption {
