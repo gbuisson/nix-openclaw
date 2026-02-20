@@ -2723,6 +2723,23 @@ in
         }; }));
           default = null;
         };
+        draftChunk = lib.mkOption {
+          type = t.nullOr (t.submodule { options = {
+          breakPreference = lib.mkOption {
+            type = t.nullOr (t.oneOf [ (t.enum [ "paragraph" ]) (t.enum [ "newline" ]) (t.enum [ "sentence" ]) ]);
+            default = null;
+          };
+          maxChars = lib.mkOption {
+            type = t.nullOr (t.int);
+            default = null;
+          };
+          minChars = lib.mkOption {
+            type = t.nullOr (t.int);
+            default = null;
+          };
+        }; });
+          default = null;
+        };
         enabled = lib.mkOption {
           type = t.nullOr (t.bool);
           default = null;
@@ -2999,6 +3016,10 @@ in
           type = t.nullOr (t.enum [ "online" "dnd" "idle" "invisible" ]);
           default = null;
         };
+        streamMode = lib.mkOption {
+          type = t.nullOr (t.enum [ "partial" "block" "off" ]);
+          default = null;
+        };
         textChunkLimit = lib.mkOption {
           type = t.nullOr (t.int);
           default = null;
@@ -3219,6 +3240,23 @@ in
           default = null;
         };
       }; }));
+        default = null;
+      };
+      draftChunk = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        breakPreference = lib.mkOption {
+          type = t.nullOr (t.oneOf [ (t.enum [ "paragraph" ]) (t.enum [ "newline" ]) (t.enum [ "sentence" ]) ]);
+          default = null;
+        };
+        maxChars = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+        minChars = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+      }; });
         default = null;
       };
       enabled = lib.mkOption {
@@ -3495,6 +3533,10 @@ in
       };
       status = lib.mkOption {
         type = t.nullOr (t.enum [ "online" "dnd" "idle" "invisible" ]);
+        default = null;
+      };
+      streamMode = lib.mkOption {
+        type = t.nullOr (t.enum [ "partial" "block" "off" ]);
         default = null;
       };
       textChunkLimit = lib.mkOption {
