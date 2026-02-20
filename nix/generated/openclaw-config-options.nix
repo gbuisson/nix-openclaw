@@ -2677,6 +2677,10 @@ in
           type = t.nullOr (t.bool);
           default = null;
         };
+        defaultTo = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
         dm = lib.mkOption {
           type = t.nullOr (t.submodule { options = {
           allowFrom = lib.mkOption {
@@ -3171,6 +3175,10 @@ in
         type = t.nullOr (t.bool);
         default = null;
       };
+      defaultTo = lib.mkOption {
+        type = t.nullOr (t.str);
+        default = null;
+      };
       dm = lib.mkOption {
         type = t.nullOr (t.submodule { options = {
         allowFrom = lib.mkOption {
@@ -3576,6 +3584,10 @@ in
           type = t.nullOr (t.bool);
           default = null;
         };
+        defaultTo = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
         dm = lib.mkOption {
           type = t.nullOr (t.submodule { options = {
           allowFrom = lib.mkOption {
@@ -3760,6 +3772,10 @@ in
         type = t.nullOr (t.str);
         default = null;
       };
+      defaultTo = lib.mkOption {
+        type = t.nullOr (t.str);
+        default = null;
+      };
       dm = lib.mkOption {
         type = t.nullOr (t.submodule { options = {
         allowFrom = lib.mkOption {
@@ -3932,6 +3948,10 @@ in
           default = null;
         };
         dbPath = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
+        defaultTo = lib.mkOption {
           type = t.nullOr (t.str);
           default = null;
         };
@@ -4125,6 +4145,10 @@ in
         type = t.nullOr (t.str);
         default = null;
       };
+      defaultTo = lib.mkOption {
+        type = t.nullOr (t.str);
+        default = null;
+      };
       dmHistoryLimit = lib.mkOption {
         type = t.nullOr (t.int);
         default = null;
@@ -4309,6 +4333,10 @@ in
         };
         configWrites = lib.mkOption {
           type = t.nullOr (t.bool);
+          default = null;
+        };
+        defaultTo = lib.mkOption {
+          type = t.nullOr (t.str);
           default = null;
         };
         dmHistoryLimit = lib.mkOption {
@@ -4554,6 +4582,10 @@ in
         type = t.nullOr (t.bool);
         default = null;
       };
+      defaultTo = lib.mkOption {
+        type = t.nullOr (t.str);
+        default = null;
+      };
       dmHistoryLimit = lib.mkOption {
         type = t.nullOr (t.int);
         default = null;
@@ -4797,6 +4829,10 @@ in
       };
       configWrites = lib.mkOption {
         type = t.nullOr (t.bool);
+        default = null;
+      };
+      defaultTo = lib.mkOption {
+        type = t.nullOr (t.str);
         default = null;
       };
       dmHistoryLimit = lib.mkOption {
@@ -5070,6 +5106,10 @@ in
           type = t.nullOr (t.bool);
           default = null;
         };
+        defaultTo = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
         dmHistoryLimit = lib.mkOption {
           type = t.nullOr (t.int);
           default = null;
@@ -5244,6 +5284,10 @@ in
       };
       configWrites = lib.mkOption {
         type = t.nullOr (t.bool);
+        default = null;
+      };
+      defaultTo = lib.mkOption {
+        type = t.nullOr (t.str);
         default = null;
       };
       dmHistoryLimit = lib.mkOption {
@@ -5540,6 +5584,10 @@ in
         };
         configWrites = lib.mkOption {
           type = t.nullOr (t.bool);
+          default = null;
+        };
+        defaultTo = lib.mkOption {
+          type = t.nullOr (t.str);
           default = null;
         };
         dm = lib.mkOption {
@@ -5910,6 +5958,10 @@ in
         type = t.nullOr (t.bool);
         default = null;
       };
+      defaultTo = lib.mkOption {
+        type = t.nullOr (t.str);
+        default = null;
+      };
       dm = lib.mkOption {
         type = t.nullOr (t.submodule { options = {
         allowFrom = lib.mkOption {
@@ -6205,6 +6257,10 @@ in
             type = t.anything;
           };
         }; }));
+          default = null;
+        };
+        defaultTo = lib.mkOption {
+          type = t.nullOr (t.oneOf [ (t.str) (t.number) ]);
           default = null;
         };
         dmHistoryLimit = lib.mkOption {
@@ -6567,6 +6623,10 @@ in
       }; }));
         default = null;
       };
+      defaultTo = lib.mkOption {
+        type = t.nullOr (t.oneOf [ (t.str) (t.number) ]);
+        default = null;
+      };
       dmHistoryLimit = lib.mkOption {
         type = t.nullOr (t.int);
         default = null;
@@ -6898,6 +6958,10 @@ in
           type = t.nullOr (t.int);
           default = null;
         };
+        defaultTo = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
         dmHistoryLimit = lib.mkOption {
           type = t.nullOr (t.int);
           default = null;
@@ -7104,6 +7168,10 @@ in
       };
       debounceMs = lib.mkOption {
         type = t.nullOr (t.int);
+        default = null;
+      };
+      defaultTo = lib.mkOption {
+        type = t.nullOr (t.str);
         default = null;
       };
       dmHistoryLimit = lib.mkOption {
