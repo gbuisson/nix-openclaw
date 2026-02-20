@@ -205,6 +205,10 @@ in
       };
       compaction = lib.mkOption {
         type = t.nullOr (t.submodule { options = {
+        keepRecentTokens = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
         maxHistoryShare = lib.mkOption {
           type = t.nullOr (t.number);
           default = null;
@@ -232,6 +236,10 @@ in
         };
         mode = lib.mkOption {
           type = t.nullOr (t.oneOf [ (t.enum [ "default" ]) (t.enum [ "safeguard" ]) ]);
+          default = null;
+        };
+        reserveTokens = lib.mkOption {
+          type = t.nullOr (t.int);
           default = null;
         };
         reserveTokensFloor = lib.mkOption {
@@ -7533,6 +7541,10 @@ in
         default = null;
       };
     }; });
+      default = null;
+    };
+    customBindHost = lib.mkOption {
+      type = t.nullOr (t.str);
       default = null;
     };
     http = lib.mkOption {
