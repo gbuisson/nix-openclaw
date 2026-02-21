@@ -933,7 +933,7 @@ in
         maxSpawnDepth = lib.mkOption {
           type = t.nullOr (t.int);
           default = null;
-          description = "Maximum nesting depth for sub-agent spawning. Default is 2 (sub-agents can spawn sub-sub-agents).";
+          description = "Maximum nesting depth for sub-agent spawning. 1 = no nesting (default), 2 = sub-agents can spawn sub-sub-agents.";
         };
         model = lib.mkOption {
           type = t.nullOr (t.oneOf [ (t.str) (t.submodule { options = {
@@ -5256,6 +5256,10 @@ in
         default = null;
       };
     }; });
+      default = null;
+    };
+    modelByChannel = lib.mkOption {
+      type = t.nullOr (t.attrsOf (t.attrsOf (t.str)));
       default = null;
     };
     msteams = lib.mkOption {
