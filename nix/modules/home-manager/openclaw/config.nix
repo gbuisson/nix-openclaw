@@ -70,9 +70,14 @@ let
     if value == null then
       null
     else if builtins.isAttrs value then
-      lib.filterAttrs (_: v: v != null) (builtins.mapAttrs (_: stripNulls) value)
+      let
+        stripped = builtins.mapAttrs (_: stripNulls) value;
+        filtered = lib.filterAttrs (_: v: v != null && v != { }) stripped;
+      in
+      if filtered == { } then null else filtered
     else if builtins.isList value then
-      builtins.filter (v: v != null) (map stripNulls value)
+      let stripped = builtins.filter (v: v != null) (map stripNulls value);
+      in if stripped == [ ] then null else stripped
     else
       value;
 
