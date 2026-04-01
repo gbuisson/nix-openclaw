@@ -98,6 +98,17 @@ log_step "build: write-cli-compat" node --import tsx scripts/write-cli-compat.ts
 
 log_step "ui:build" pnpm ui:build
 
+# tsdown compiles TS→JS into dist/extensions/ but does not copy static assets.
+# Copy openclaw.plugin.json (and any other JSON metadata) into dist/extensions/.
+log_step "copy extension metadata to dist" find extensions -name 'openclaw.plugin.json' -exec sh -c '
+  for f; do
+    rel="${f#extensions/}"
+    dir="dist/extensions/$(dirname "$rel")"
+    mkdir -p "$dir"
+    cp "$f" "$dir/"
+  done
+' _ {} +
+
 log_step "pnpm prune --prod" env CI=true pnpm prune --prod
 
 # Reduce output size (pnpm implementation detail; safe to remove)
