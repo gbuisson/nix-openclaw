@@ -66,20 +66,25 @@ let
   };
 
   stripNulls =
-    value:
-    if value == null then
-      null
-    else if builtins.isAttrs value then
-      let
-        stripped = builtins.mapAttrs (_: stripNulls) value;
-        filtered = lib.filterAttrs (_: v: v != null && v != { }) stripped;
-      in
-      if filtered == { } then null else filtered
-    else if builtins.isList value then
-      let stripped = builtins.filter (v: v != null) (map stripNulls value);
-      in if stripped == [ ] then null else stripped
-    else
-      value;
+    let
+      go =
+        depth: value:
+        if value == null then
+          null
+        else if builtins.isAttrs value then
+          let
+            stripped = builtins.mapAttrs (_: go (depth + 1)) value;
+            filtered = lib.filterAttrs (_: v: v != null && v != { }) stripped;
+          in
+          # Keep top-level as {} to avoid "expected a set" errors
+          if filtered == { } && depth > 0 then null else filtered
+        else if builtins.isList value then
+          let stripped = builtins.filter (v: v != null) (map (go (depth + 1)) value);
+          in if stripped == [ ] then null else stripped
+        else
+          value;
+    in
+    go 0;
 
   baseConfig = {
     gateway = {
