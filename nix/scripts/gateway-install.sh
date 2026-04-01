@@ -168,6 +168,9 @@ if [ -d "$matrix_ext" ]; then
 fi
 # === END MATRIX EXTENSION SUPPORT ===
 
+# Remove dangling symlinks left by pnpm prune (e.g. node-which in cmake-js, node-llama-cpp)
+log_step "clean dangling symlinks" find "$out/lib/openclaw/node_modules" -type l ! -exec test -e {} \; -delete
+
 log_step "validate node_modules symlinks" check_no_broken_symlinks "$out/lib/openclaw/node_modules"
 
 bash -e -c '. "$STDENV_SETUP"; makeWrapper "$NODE_BIN" "$out/bin/openclaw" --add-flags "$out/lib/openclaw/dist/index.js" --set-default OPENCLAW_NIX_MODE "1"'
