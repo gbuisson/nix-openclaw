@@ -23,6 +23,21 @@
 assert gatewaySrc == null || pnpmDepsHash != null;
 
 let
+  # Matrix crypto native binary (pnpm postinstall is skipped in nix builds)
+  matrixCryptoLibName =
+    if stdenv.hostPlatform.isDarwin then
+      (if stdenv.hostPlatform.isAarch64 then "matrix-sdk-crypto.darwin-arm64.node" else "matrix-sdk-crypto.darwin-x64.node")
+    else
+      (if stdenv.hostPlatform.isAarch64 then "matrix-sdk-crypto.linux-arm64-gnu.node" else "matrix-sdk-crypto.linux-x64-gnu.node");
+
+  matrixCryptoLibSrc =
+    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
+      fetchurl {
+        url = "https://github.com/matrix-org/matrix-rust-sdk-crypto-nodejs/releases/download/v0.4.0/matrix-sdk-crypto.darwin-arm64.node";
+        hash = "sha256-9/X99ikki9q5NOUDj3KL+7OzYfOhSiTtGAZhCMEpry8=";
+      }
+    else null;
+
   common =
     import ../lib/openclaw-gateway-common.nix
       {
@@ -58,6 +73,9 @@ let
           NODE_BIN = "${nodejs_22}/bin/node";
           PATCH_CLIPBOARD_SH = "${../scripts/patch-clipboard.sh}";
           PATCH_CLIPBOARD_WRAPPER = "${../scripts/clipboard-wrapper.cjs}";
+          # Matrix extension support
+          MATRIX_CRYPTO_LIB_NAME = matrixCryptoLibName;
+          MATRIX_CRYPTO_LIB_SRC = if matrixCryptoLibSrc != null then "${matrixCryptoLibSrc}" else "";
         };
       };
 

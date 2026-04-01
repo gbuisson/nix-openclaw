@@ -115,6 +115,46 @@ if [ -n "$hasown_src" ]; then
   fi
 fi
 
+# === MATRIX EXTENSION SUPPORT ===
+# Link matrix extension dependencies to node_modules (pnpm hoists these
+# under .pnpm but the matrix extension expects them at the top level).
+matrix_ext="$out/lib/openclaw/extensions/matrix"
+if [ -d "$matrix_ext" ]; then
+  log_step "link matrix extension dependencies"
+
+  # matrix-bot-sdk
+  matrix_bot_sdk_src="$(find "$out/lib/openclaw/node_modules/.pnpm" -type d -name "matrix-bot-sdk" | grep "@vector-im" | head -n 1)"
+  if [ -n "$matrix_bot_sdk_src" ]; then
+    mkdir -p "$matrix_ext/node_modules/@vector-im" "$out/lib/openclaw/node_modules/@vector-im"
+    ln -sfn "$matrix_bot_sdk_src" "$matrix_ext/node_modules/@vector-im/matrix-bot-sdk"
+    ln -sfn "$matrix_bot_sdk_src" "$out/lib/openclaw/node_modules/@vector-im/matrix-bot-sdk"
+  fi
+
+  # matrix-sdk-crypto-nodejs
+  matrix_crypto_src="$(find "$out/lib/openclaw/node_modules/.pnpm" -type d -name "matrix-sdk-crypto-nodejs" | grep "@matrix-org" | head -n 1)"
+  if [ -n "$matrix_crypto_src" ]; then
+    mkdir -p "$matrix_ext/node_modules/@matrix-org" "$out/lib/openclaw/node_modules/@matrix-org"
+    ln -sfn "$matrix_crypto_src" "$matrix_ext/node_modules/@matrix-org/matrix-sdk-crypto-nodejs"
+    ln -sfn "$matrix_crypto_src" "$out/lib/openclaw/node_modules/@matrix-org/matrix-sdk-crypto-nodejs"
+
+    # Copy pre-fetched native binary if available
+    if [ -n "$MATRIX_CRYPTO_LIB_SRC" ] && [ -n "$MATRIX_CRYPTO_LIB_NAME" ]; then
+      native_dir="$matrix_crypto_src/node_modules/@aspect-build"
+      if [ -d "$matrix_crypto_src" ]; then
+        cp "$MATRIX_CRYPTO_LIB_SRC" "$matrix_crypto_src/$MATRIX_CRYPTO_LIB_NAME" 2>/dev/null || true
+      fi
+    fi
+  fi
+
+  # music-metadata (audio file handling)
+  music_metadata_src="$(find "$out/lib/openclaw/node_modules/.pnpm" -type d -name "music-metadata" | head -n 1)"
+  if [ -n "$music_metadata_src" ]; then
+    ln -sfn "$music_metadata_src" "$matrix_ext/node_modules/music-metadata"
+    ln -sfn "$music_metadata_src" "$out/lib/openclaw/node_modules/music-metadata"
+  fi
+fi
+# === END MATRIX EXTENSION SUPPORT ===
+
 log_step "validate node_modules symlinks" check_no_broken_symlinks "$out/lib/openclaw/node_modules"
 
 bash -e -c '. "$STDENV_SETUP"; makeWrapper "$NODE_BIN" "$out/bin/openclaw" --add-flags "$out/lib/openclaw/dist/index.js" --set-default OPENCLAW_NIX_MODE "1"'
