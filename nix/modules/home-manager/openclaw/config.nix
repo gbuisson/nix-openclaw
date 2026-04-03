@@ -108,9 +108,10 @@ let
           inst.package;
       pluginPackages = plugins.pluginPackagesFor name;
       pluginEnvAll = plugins.pluginEnvAllFor name;
-      mergedConfig0 = stripNulls (
-        lib.recursiveUpdate (lib.recursiveUpdate baseConfig cfg.config) inst.config
-      );
+      # Force evaluation of submodule via JSON round-trip to avoid
+      # lazy attrset issues with stripNulls on submodule types.
+      rawMerged = lib.recursiveUpdate (lib.recursiveUpdate baseConfig cfg.config) inst.config;
+      mergedConfig0 = stripNulls (builtins.fromJSON (builtins.toJSON rawMerged));
       existingWorkspace = (((mergedConfig0.agents or { }).defaults or { }).workspace or null);
       mergedConfig =
         if (cfg.workspace.pinAgentDefaults or true) && existingWorkspace == null then
