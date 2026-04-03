@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev 5e69d7e75bf0e656c1e39af439941aac74b95c19. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev 6a465611d8e9fed72eebe497630646bebc02e57c. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -1367,6 +1367,10 @@ in
       }; });
         default = null;
       };
+      skills = lib.mkOption {
+        type = t.nullOr (t.listOf (t.str));
+        default = null;
+      };
       skipBootstrap = lib.mkOption {
         type = t.nullOr (t.bool);
         default = null;
@@ -2722,6 +2726,14 @@ in
     type = t.nullOr (t.submodule { options = {
     cooldowns = lib.mkOption {
       type = t.nullOr (t.submodule { options = {
+      authPermanentBackoffMinutes = lib.mkOption {
+        type = t.nullOr (t.number);
+        default = null;
+      };
+      authPermanentMaxMinutes = lib.mkOption {
+        type = t.nullOr (t.number);
+        default = null;
+      };
       billingBackoffHours = lib.mkOption {
         type = t.nullOr (t.number);
         default = null;
