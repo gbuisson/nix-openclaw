@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev a592cd67cb4b74c2a70df0488bbaf55009e6c04c. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev 5e69d7e75bf0e656c1e39af439941aac74b95c19. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -1196,10 +1196,6 @@ in
           type = t.nullOr (t.oneOf [ (t.enum [ "off" ]) (t.enum [ "non-main" ]) (t.enum [ "all" ]) ]);
           default = null;
         };
-        perSession = lib.mkOption {
-          type = t.nullOr (t.bool);
-          default = null;
-        };
         prune = lib.mkOption {
           type = t.nullOr (t.submodule { options = {
           idleHours = lib.mkOption {
@@ -2171,10 +2167,6 @@ in
           type = t.nullOr (t.oneOf [ (t.enum [ "off" ]) (t.enum [ "non-main" ]) (t.enum [ "all" ]) ]);
           default = null;
         };
-        perSession = lib.mkOption {
-          type = t.nullOr (t.bool);
-          default = null;
-        };
         prune = lib.mkOption {
           type = t.nullOr (t.submodule { options = {
           idleHours = lib.mkOption {
@@ -3008,10 +3000,6 @@ in
     };
     ssrfPolicy = lib.mkOption {
       type = t.nullOr (t.submodule { options = {
-      allowPrivateNetwork = lib.mkOption {
-        type = t.nullOr (t.bool);
-        default = null;
-      };
       allowedHostnames = lib.mkOption {
         type = t.nullOr (t.listOf (t.str));
         default = null;
@@ -6441,50 +6429,8 @@ in
 
   talk = lib.mkOption {
     type = t.nullOr (t.submodule { options = {
-    apiKey = lib.mkOption {
-      type = t.nullOr (t.oneOf [ (t.str) (t.oneOf [ (t.submodule { options = {
-      id = lib.mkOption {
-        type = t.str;
-      };
-      provider = lib.mkOption {
-        type = t.str;
-      };
-      source = lib.mkOption {
-        type = t.enum [ "env" ];
-      };
-    }; }) (t.submodule { options = {
-      id = lib.mkOption {
-        type = t.str;
-      };
-      provider = lib.mkOption {
-        type = t.str;
-      };
-      source = lib.mkOption {
-        type = t.enum [ "file" ];
-      };
-    }; }) (t.submodule { options = {
-      id = lib.mkOption {
-        type = t.str;
-      };
-      provider = lib.mkOption {
-        type = t.str;
-      };
-      source = lib.mkOption {
-        type = t.enum [ "exec" ];
-      };
-    }; }) ]) ]);
-      default = null;
-    };
     interruptOnSpeech = lib.mkOption {
       type = t.nullOr (t.bool);
-      default = null;
-    };
-    modelId = lib.mkOption {
-      type = t.nullOr (t.str);
-      default = null;
-    };
-    outputFormat = lib.mkOption {
-      type = t.nullOr (t.str);
       default = null;
     };
     provider = lib.mkOption {
@@ -6548,14 +6494,6 @@ in
     };
     silenceTimeoutMs = lib.mkOption {
       type = t.nullOr (t.int);
-      default = null;
-    };
-    voiceAliases = lib.mkOption {
-      type = t.nullOr (t.attrsOf (t.str));
-      default = null;
-    };
-    voiceId = lib.mkOption {
-      type = t.nullOr (t.str);
       default = null;
     };
   }; });
