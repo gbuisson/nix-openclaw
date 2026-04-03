@@ -108,10 +108,12 @@ let
           inst.package;
       pluginPackages = plugins.pluginPackagesFor name;
       pluginEnvAll = plugins.pluginEnvAllFor name;
-      # Force evaluation of submodule via JSON round-trip to avoid
-      # lazy attrset issues with stripNulls on submodule types.
-      rawMerged = lib.recursiveUpdate (lib.recursiveUpdate baseConfig cfg.config) inst.config;
-      mergedConfig0 = stripNulls (builtins.fromJSON (builtins.toJSON rawMerged));
+      # Strip nulls from each config layer BEFORE merging, so that null
+      # values in inst.config don't overwrite real values from cfg.config.
+      # Use JSON round-trip to force lazy submodule evaluation.
+      cleanGlobal = stripNulls (builtins.fromJSON (builtins.toJSON cfg.config));
+      cleanInstance = stripNulls (builtins.fromJSON (builtins.toJSON inst.config));
+      mergedConfig0 = lib.recursiveUpdate (lib.recursiveUpdate baseConfig cleanGlobal) cleanInstance;
       existingWorkspace = (((mergedConfig0.agents or { }).defaults or { }).workspace or null);
       mergedConfig =
         if (cfg.workspace.pinAgentDefaults or true) && existingWorkspace == null then
