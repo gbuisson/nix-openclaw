@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev c185413a8ef4d9cc08827f744b6fc335ff0c0280. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev a6e1fe02960fc1b69cc621bc061a3ece865c7691. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -630,6 +630,10 @@ in
       };
       maxConcurrent = lib.mkOption {
         type = t.nullOr (t.int);
+        default = null;
+      };
+      mediaGenerationAutoProviderFallback = lib.mkOption {
+        type = t.nullOr (t.bool);
         default = null;
       };
       mediaMaxMb = lib.mkOption {
