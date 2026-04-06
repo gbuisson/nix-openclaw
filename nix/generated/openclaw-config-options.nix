@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev 6d34a1c814b760a5342b21a2c39e503f38570627. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev 3027f0dde5a0bb4ef86b789b83f81a45e65a137d. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -848,6 +848,19 @@ in
           default = null;
         };
       }; }));
+        default = null;
+      };
+      musicGenerationModel = lib.mkOption {
+        type = t.nullOr (t.oneOf [ (t.str) (t.submodule { options = {
+        fallbacks = lib.mkOption {
+          type = t.nullOr (t.listOf (t.str));
+          default = null;
+        };
+        primary = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
+      }; }) ]);
         default = null;
       };
       params = lib.mkOption {
