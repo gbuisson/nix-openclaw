@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev 3e6160f153d5c662ed24f5be002ed202c3c8d8b3. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev 104df3360e4ca26d65f6222819f6fa85c65336d4. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -250,6 +250,10 @@ in
           default = null;
         };
       }; });
+        default = null;
+      };
+      contextInjection = lib.mkOption {
+        type = t.nullOr (t.oneOf [ (t.enum [ "always" ]) (t.enum [ "continuation-skip" ]) ]);
         default = null;
       };
       contextPruning = lib.mkOption {
