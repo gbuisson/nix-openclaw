@@ -74,6 +74,19 @@ fi
 
 log_step "patchShebangs node_modules/.bin" bash -e -c '. "$STDENV_SETUP"; patchShebangs "$out/lib/openclaw/node_modules/.bin"'
 
+# Recreate stable root runtime aliases when hashed runtime bundles are present
+# but the postbuild aliases were not shipped (e.g. runtime-model-auth.runtime.js).
+log_step "restore stable runtime aliases" bash -eu -c '
+  dist_dir="$1"
+  [ -d "$dist_dir" ] || exit 0
+  find "$dist_dir" -maxdepth 1 -type f -name "*.js" | while IFS= read -r file; do
+    name="$(basename "$file")"
+    alias_name="$(printf "%s\n" "$name" | sed -nE "s/^(.+\.(runtime|contract))-[A-Za-z0-9_-]+\.js$/\1.js/p")"
+    [ -n "$alias_name" ] || continue
+    printf "export * from \"./%s\";\n" "$name" > "$dist_dir/$alias_name"
+  done
+' _ "$out/lib/openclaw/dist"
+
 # Work around missing dependency declaration in pi-coding-agent (strip-ansi).
 # Ensure it is resolvable at runtime without changing upstream.
 pi_pkg="$(find "$out/lib/openclaw/node_modules/.pnpm" -path "*/node_modules/@mariozechner/pi-coding-agent" -print | head -n 1)"
