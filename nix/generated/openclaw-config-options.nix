@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev e617aa6d1e71b61241f3a705a4f9685c518c0bfc. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev 4a0b8c6248cf2035b351150791548f38567ad5bc. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -362,6 +362,10 @@ in
         };
         postIndexSync = lib.mkOption {
           type = t.nullOr (t.enum [ "off" "async" "await" ]);
+          default = null;
+        };
+        provider = lib.mkOption {
+          type = t.nullOr (t.str);
           default = null;
         };
         qualityGuard = lib.mkOption {
