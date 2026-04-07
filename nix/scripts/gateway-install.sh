@@ -135,8 +135,14 @@ matrix_ext="$out/lib/openclaw/extensions/matrix"
 if [ -d "$matrix_ext" ]; then
   log_step "link matrix extension dependencies"
 
+  # Upstream package layout changed in 2026.4.x: some installs are flattened at top-level
+  # instead of living under node_modules/.pnpm. Try .pnpm first, then fall back to top-level.
+
   # matrix-bot-sdk
-  matrix_bot_sdk_src="$(find "$out/lib/openclaw/node_modules/.pnpm" -type d -name "matrix-bot-sdk" | grep "@vector-im" | head -n 1)"
+  matrix_bot_sdk_src="$(find "$out/lib/openclaw/node_modules/.pnpm" -type d -name "matrix-bot-sdk" 2>/dev/null | grep "@vector-im" | head -n 1)"
+  if [ -z "$matrix_bot_sdk_src" ] && [ -d "$out/lib/openclaw/node_modules/@vector-im/matrix-bot-sdk" ]; then
+    matrix_bot_sdk_src="$out/lib/openclaw/node_modules/@vector-im/matrix-bot-sdk"
+  fi
   if [ -n "$matrix_bot_sdk_src" ]; then
     mkdir -p "$matrix_ext/node_modules/@vector-im" "$out/lib/openclaw/node_modules/@vector-im"
     ln -sfn "$matrix_bot_sdk_src" "$matrix_ext/node_modules/@vector-im/matrix-bot-sdk"
@@ -144,23 +150,26 @@ if [ -d "$matrix_ext" ]; then
   fi
 
   # matrix-sdk-crypto-nodejs
-  matrix_crypto_src="$(find "$out/lib/openclaw/node_modules/.pnpm" -type d -name "matrix-sdk-crypto-nodejs" | grep "@matrix-org" | head -n 1)"
+  matrix_crypto_src="$(find "$out/lib/openclaw/node_modules/.pnpm" -type d -name "matrix-sdk-crypto-nodejs" 2>/dev/null | grep "@matrix-org" | head -n 1)"
+  if [ -z "$matrix_crypto_src" ] && [ -d "$out/lib/openclaw/node_modules/@matrix-org/matrix-sdk-crypto-nodejs" ]; then
+    matrix_crypto_src="$out/lib/openclaw/node_modules/@matrix-org/matrix-sdk-crypto-nodejs"
+  fi
   if [ -n "$matrix_crypto_src" ]; then
     mkdir -p "$matrix_ext/node_modules/@matrix-org" "$out/lib/openclaw/node_modules/@matrix-org"
     ln -sfn "$matrix_crypto_src" "$matrix_ext/node_modules/@matrix-org/matrix-sdk-crypto-nodejs"
     ln -sfn "$matrix_crypto_src" "$out/lib/openclaw/node_modules/@matrix-org/matrix-sdk-crypto-nodejs"
 
     # Copy pre-fetched native binary if available
-    if [ -n "$MATRIX_CRYPTO_LIB_SRC" ] && [ -n "$MATRIX_CRYPTO_LIB_NAME" ]; then
-      native_dir="$matrix_crypto_src/node_modules/@aspect-build"
-      if [ -d "$matrix_crypto_src" ]; then
-        cp "$MATRIX_CRYPTO_LIB_SRC" "$matrix_crypto_src/$MATRIX_CRYPTO_LIB_NAME" 2>/dev/null || true
-      fi
+    if [ -n "$MATRIX_CRYPTO_LIB_SRC" ] && [ -n "$MATRIX_CRYPTO_LIB_NAME" ] && [ -d "$matrix_crypto_src" ]; then
+      cp "$MATRIX_CRYPTO_LIB_SRC" "$matrix_crypto_src/$MATRIX_CRYPTO_LIB_NAME" 2>/dev/null || true
     fi
   fi
 
   # music-metadata (audio file handling)
-  music_metadata_src="$(find "$out/lib/openclaw/node_modules/.pnpm" -type d -name "music-metadata" | head -n 1)"
+  music_metadata_src="$(find "$out/lib/openclaw/node_modules/.pnpm" -type d -name "music-metadata" 2>/dev/null | head -n 1)"
+  if [ -z "$music_metadata_src" ] && [ -d "$out/lib/openclaw/node_modules/music-metadata" ]; then
+    music_metadata_src="$out/lib/openclaw/node_modules/music-metadata"
+  fi
   if [ -n "$music_metadata_src" ]; then
     ln -sfn "$music_metadata_src" "$matrix_ext/node_modules/music-metadata"
     ln -sfn "$music_metadata_src" "$out/lib/openclaw/node_modules/music-metadata"
