@@ -70,7 +70,7 @@ log_step "restore stable runtime aliases" bash -eu -c '
   [ -d "$dist_dir" ] || exit 0
   find "$dist_dir" -maxdepth 1 -type f -name "*.js" | while IFS= read -r file; do
     name="$(basename "$file")"
-    alias_name="$(printf "%s\n" "$name" | sed -E "s/^(.+\.(runtime|contract))-[A-Za-z0-9_-]+\.js$/\1.js/p")"
+    alias_name="$(printf "%s\n" "$name" | sed -nE "s/^(.+\.(runtime|contract))-[A-Za-z0-9_-]+\.js$/\1.js/p")"
     [ -n "$alias_name" ] || continue
     printf "export * from \"./%s\";\n" "$name" > "$dist_dir/$alias_name"
   done
