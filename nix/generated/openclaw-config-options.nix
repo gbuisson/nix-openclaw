@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev 02261e931c6ae5e2f6fdd2e45f5375d4690e1b01. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev dfec7d7f80ce5d381b590e5b456236b862fa21a6. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -533,6 +533,10 @@ in
           default = null;
         };
         includeReasoning = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
+        includeSystemPromptSection = lib.mkOption {
           type = t.nullOr (t.bool);
           default = null;
         };
@@ -1452,6 +1456,10 @@ in
       }; });
         default = null;
       };
+      systemPromptOverride = lib.mkOption {
+        type = t.nullOr (t.str);
+        default = null;
+      };
       thinkingDefault = lib.mkOption {
         type = t.nullOr (t.oneOf [ (t.enum [ "off" ]) (t.enum [ "minimal" ]) (t.enum [ "low" ]) (t.enum [ "medium" ]) (t.enum [ "high" ]) (t.enum [ "xhigh" ]) (t.enum [ "adaptive" ]) ]);
         default = null;
@@ -1563,6 +1571,10 @@ in
           default = null;
         };
         includeReasoning = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
+        includeSystemPromptSection = lib.mkOption {
           type = t.nullOr (t.bool);
           default = null;
         };
@@ -2408,6 +2420,10 @@ in
           default = null;
         };
       }; });
+        default = null;
+      };
+      systemPromptOverride = lib.mkOption {
+        type = t.nullOr (t.str);
         default = null;
       };
       thinkingDefault = lib.mkOption {
