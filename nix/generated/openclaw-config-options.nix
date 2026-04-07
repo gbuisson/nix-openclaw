@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev 91b344609888e6109177359ee2bc12da5328f6b0. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev 76bc0ae32fe0b32e5a58720fccd4a84557bc2f78. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -5102,6 +5102,10 @@ in
             default = null;
           };
           requiresOpenAiAnthropicToolPayload = lib.mkOption {
+            type = t.nullOr (t.bool);
+            default = null;
+          };
+          requiresStringContent = lib.mkOption {
             type = t.nullOr (t.bool);
             default = null;
           };
