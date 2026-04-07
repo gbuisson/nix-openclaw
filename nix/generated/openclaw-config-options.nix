@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev eafe0a6d678faa74f6df9e3bf6d68c922b68167c. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev 4fa7931b1b06bd5b1ba1e695bc31eb8cd03300d1. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -176,6 +176,10 @@ in
         };
         imageMode = lib.mkOption {
           type = t.nullOr (t.oneOf [ (t.enum [ "repeat" ]) (t.enum [ "list" ]) ]);
+          default = null;
+        };
+        imagePathScope = lib.mkOption {
+          type = t.nullOr (t.oneOf [ (t.enum [ "temp" ]) (t.enum [ "workspace" ]) ]);
           default = null;
         };
         input = lib.mkOption {
