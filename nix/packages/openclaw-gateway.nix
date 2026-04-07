@@ -71,6 +71,8 @@ let
         extraBuildInputs = [ vips ];
         extraEnv = {
           NODE_BIN = "${nodejs_22}/bin/node";
+          # tsdown can OOM on 8 GB machines (e.g. Mac Mini) during gateway builds.
+          NODE_OPTIONS = "--max-old-space-size=6144";
           PATCH_CLIPBOARD_SH = "${../scripts/patch-clipboard.sh}";
           PATCH_CLIPBOARD_WRAPPER = "${../scripts/clipboard-wrapper.cjs}";
           # Matrix extension support
