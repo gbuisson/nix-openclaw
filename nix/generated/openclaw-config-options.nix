@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev 0a5aefefbdb4cdbcadd0e5721df64d6a6297d8e9. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev b7cc0649618be0c5793bc018ca41a3c2e58fb163. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -186,6 +186,10 @@ in
           type = t.nullOr (t.oneOf [ (t.enum [ "arg" ]) (t.enum [ "stdin" ]) ]);
           default = null;
         };
+        jsonlDialect = lib.mkOption {
+          type = t.nullOr (t.enum [ "claude-stream-json" ]);
+          default = null;
+        };
         maxPromptArgChars = lib.mkOption {
           type = t.nullOr (t.int);
           default = null;
@@ -283,6 +287,14 @@ in
           default = null;
         };
         systemPromptArg = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
+        systemPromptFileConfigArg = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
+        systemPromptFileConfigKey = lib.mkOption {
           type = t.nullOr (t.str);
           default = null;
         };
@@ -484,8 +496,25 @@ in
         type = t.nullOr (t.oneOf [ (t.enum [ "off" ]) (t.enum [ "on" ]) (t.enum [ "ask" ]) (t.enum [ "full" ]) ]);
         default = null;
       };
+      embeddedHarness = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        fallback = lib.mkOption {
+          type = t.nullOr (t.enum [ "pi" "none" ]);
+          default = null;
+        };
+        runtime = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
+      }; });
+        default = null;
+      };
       embeddedPi = lib.mkOption {
         type = t.nullOr (t.submodule { options = {
+        executionContract = lib.mkOption {
+          type = t.nullOr (t.oneOf [ (t.enum [ "default" ]) (t.enum [ "strict-agentic" ]) ]);
+          default = null;
+        };
         projectSettingsPolicy = lib.mkOption {
           type = t.nullOr (t.oneOf [ (t.enum [ "trusted" ]) (t.enum [ "sanitize" ]) (t.enum [ "ignore" ]) ]);
           default = null;
@@ -576,6 +605,10 @@ in
           type = t.nullOr (t.str);
           default = null;
         };
+        timeoutSeconds = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
         to = lib.mkOption {
           type = t.nullOr (t.str);
           default = null;
@@ -635,7 +668,7 @@ in
         idleTimeoutSeconds = lib.mkOption {
           type = t.nullOr (t.int);
           default = null;
-          description = "Idle timeout for LLM streaming responses in seconds. If no token is received within this time, the request is aborted. Set to 0 to disable. Default: 60 seconds.";
+          description = "Idle timeout for LLM streaming responses in seconds. If no token is received within this time, the request is aborted. Set to 0 to disable. Default: 120 seconds.";
         };
       }; });
         default = null;
@@ -1526,6 +1559,28 @@ in
         type = t.nullOr (t.bool);
         default = null;
       };
+      embeddedHarness = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        fallback = lib.mkOption {
+          type = t.nullOr (t.enum [ "pi" "none" ]);
+          default = null;
+        };
+        runtime = lib.mkOption {
+          type = t.nullOr (t.str);
+          default = null;
+        };
+      }; });
+        default = null;
+      };
+      embeddedPi = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        executionContract = lib.mkOption {
+          type = t.nullOr (t.oneOf [ (t.enum [ "default" ]) (t.enum [ "strict-agentic" ]) ]);
+          default = null;
+        };
+      }; });
+        default = null;
+      };
       fastModeDefault = lib.mkOption {
         type = t.nullOr (t.bool);
         default = null;
@@ -1612,6 +1667,10 @@ in
         };
         target = lib.mkOption {
           type = t.nullOr (t.str);
+          default = null;
+        };
+        timeoutSeconds = lib.mkOption {
+          type = t.nullOr (t.int);
           default = null;
         };
         to = lib.mkOption {
@@ -3614,6 +3673,10 @@ in
     };
     controlUi = lib.mkOption {
       type = t.nullOr (t.submodule { options = {
+      allowExternalEmbedUrls = lib.mkOption {
+        type = t.nullOr (t.bool);
+        default = null;
+      };
       allowInsecureAuth = lib.mkOption {
         type = t.nullOr (t.bool);
         default = null;
@@ -3632,6 +3695,10 @@ in
       };
       dangerouslyDisableDeviceAuth = lib.mkOption {
         type = t.nullOr (t.bool);
+        default = null;
+      };
+      embedSandbox = lib.mkOption {
+        type = t.nullOr (t.oneOf [ (t.enum [ "strict" ]) (t.enum [ "scripts" ]) (t.enum [ "trusted" ]) ]);
         default = null;
       };
       enabled = lib.mkOption {
@@ -5219,6 +5286,10 @@ in
       };
       request = lib.mkOption {
         type = t.nullOr (t.submodule { options = {
+        allowPrivateNetwork = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
         auth = lib.mkOption {
           type = t.nullOr (t.oneOf [ (t.submodule { options = {
           mode = lib.mkOption {
@@ -6826,6 +6897,15 @@ in
     };
     media = lib.mkOption {
       type = t.nullOr (t.submodule { options = {
+      asyncCompletion = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        directSend = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
+      }; });
+        default = null;
+      };
       audio = lib.mkOption {
         type = t.nullOr (t.submodule { options = {
         attachments = lib.mkOption {
@@ -11898,6 +11978,15 @@ in
         };
         readability = lib.mkOption {
           type = t.nullOr (t.bool);
+          default = null;
+        };
+        ssrfPolicy = lib.mkOption {
+          type = t.nullOr (t.submodule { options = {
+          allowRfc2544BenchmarkRange = lib.mkOption {
+            type = t.nullOr (t.bool);
+            default = null;
+          };
+        }; });
           default = null;
         };
         timeoutSeconds = lib.mkOption {
