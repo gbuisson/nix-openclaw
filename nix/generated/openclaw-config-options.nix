@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev 52bf19c45e0891a17dd7031aefe3c10f4e4713e9. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev b6faa6945123a41d4ef7daa0865b1087441ad343. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -1439,6 +1439,35 @@ in
       };
       skipBootstrap = lib.mkOption {
         type = t.nullOr (t.bool);
+        default = null;
+      };
+      startupContext = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        applyOn = lib.mkOption {
+          type = t.nullOr (t.listOf (t.oneOf [ (t.enum [ "new" ]) (t.enum [ "reset" ]) ]));
+          default = null;
+        };
+        dailyMemoryDays = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+        enabled = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
+        maxFileBytes = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+        maxFileChars = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+        maxTotalChars = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+      }; });
         default = null;
       };
       subagents = lib.mkOption {
