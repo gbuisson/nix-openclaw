@@ -61,6 +61,18 @@ prefetch_json() {
   nix --extra-experimental-features "nix-command flakes" store prefetch-file --unpack --json "$url"
 }
 
+unpacked_zip_hash() {
+  local url="$1"
+  local archive_path unpack_dir
+
+  archive_path=$(nix-prefetch-url "$url" | tail -n 1)
+  archive_path="/nix/store/${archive_path}-$(basename "$url")"
+  unpack_dir=$(mktemp -d)
+  unzip -q "$archive_path" -d "$unpack_dir"
+  nix hash path "$unpack_dir"
+  rm -rf "$unpack_dir"
+}
+
 refresh_pnpm_hash() {
   local build_log pnpm_hash
   build_log=$(mktemp)
@@ -169,7 +181,7 @@ apply_release() {
   local release_tag="$1"
   local selected_sha="$2"
   local app_url="$3"
-  local release_version source_url source_prefetch source_hash source_store_path app_prefetch app_hash
+  local release_version source_url source_prefetch source_hash source_store_path app_hash
   local backup_dir success
 
   release_version="${release_tag#v}"
@@ -183,8 +195,7 @@ apply_release() {
     exit 1
   fi
 
-  app_prefetch=$(prefetch_json "$app_url")
-  app_hash=$(printf '%s' "$app_prefetch" | jq -r '.hash // empty')
+  app_hash=$(unpacked_zip_hash "$app_url")
   if [[ -z "$app_hash" ]]; then
     echo "Failed to resolve app hash for $release_tag" >&2
     exit 1
@@ -240,6 +251,8 @@ case "$mode" in
     require_cmd gh
     require_cmd nix
     require_cmd perl
+    require_cmd nix-prefetch-url
+    require_cmd unzip
     apply_release "$2" "$3" "$4"
     ;;
   *)
