@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev 8dd1abedec92c0df6ef2582d611cb6149b0ecf36. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev c5b3f00d1173ad0131cf9faa45e893b15a333f7c. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -534,6 +534,15 @@ in
         type = t.nullOr (t.str);
         default = null;
       };
+      experimental = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        localModelLean = lib.mkOption {
+          type = t.nullOr (t.bool);
+          default = null;
+        };
+      }; });
+        default = null;
+      };
       heartbeat = lib.mkOption {
         type = t.nullOr (t.submodule { options = {
         accountId = lib.mkOption {
@@ -671,10 +680,6 @@ in
           description = "Idle timeout for LLM streaming responses in seconds. If no token is received within this time, the request is aborted. Set to 0 to disable. Default: 120 seconds.";
         };
       }; });
-        default = null;
-      };
-      localModelMode = lib.mkOption {
-        type = t.nullOr (t.oneOf [ (t.enum [ "default" ]) (t.enum [ "lean" ]) ]);
         default = null;
       };
       maxConcurrent = lib.mkOption {
