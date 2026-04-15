@@ -1,4 +1,4 @@
-# Generated from upstream OpenClaw schema at rev 32222812ea4f9c352386741314f4f4163f1c7eae. DO NOT EDIT.
+# Generated from upstream OpenClaw schema at rev a177d8d454376bbd5acd8f88a7a4adceffdb63fa. DO NOT EDIT.
 # Generator: nix/scripts/generate-config-options.ts
 { lib }:
 let
@@ -414,6 +414,27 @@ in
       };
       contextInjection = lib.mkOption {
         type = t.nullOr (t.oneOf [ (t.enum [ "always" ]) (t.enum [ "continuation-skip" ]) ]);
+        default = null;
+      };
+      contextLimits = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        memoryGetDefaultLines = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+        memoryGetMaxChars = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+        postCompactionMaxChars = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+        toolResultMaxChars = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+      }; });
         default = null;
       };
       contextPruning = lib.mkOption {
@@ -1593,6 +1614,27 @@ in
         type = t.nullOr (t.str);
         default = null;
       };
+      contextLimits = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        memoryGetDefaultLines = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+        memoryGetMaxChars = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+        postCompactionMaxChars = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+        toolResultMaxChars = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+      }; });
+        default = null;
+      };
       default = lib.mkOption {
         type = t.nullOr (t.bool);
         default = null;
@@ -2495,6 +2537,15 @@ in
       };
       skills = lib.mkOption {
         type = t.nullOr (t.listOf (t.str));
+        default = null;
+      };
+      skillsLimits = lib.mkOption {
+        type = t.nullOr (t.submodule { options = {
+        maxSkillsPromptChars = lib.mkOption {
+          type = t.nullOr (t.int);
+          default = null;
+        };
+      }; });
         default = null;
       };
       subagents = lib.mkOption {
